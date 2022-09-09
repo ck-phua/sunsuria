@@ -1,16 +1,6 @@
 {
 	"name": "REST_Defects",
-	"type": "Microsoft.DataFactory/factories/linkedservices",
 	"properties": {
-		"parameters": {
-			"auth_token": {
-				"type": "securestring",
-				"defaultValue": {
-					"type": "SecureString",
-					"value": "**********"
-				}
-			}
-		},
 		"annotations": [],
 		"type": "RestService",
 		"typeProperties": {
@@ -18,5 +8,6 @@
 			"enableServerCertificateValidation": true,
 			"authenticationType": "Anonymous"
 		}
-	}
+	},
+	"type": "Microsoft.DataFactory/factories/linkedservices"
 }
