@@ -1,12 +1,19 @@
 {
 	"name": "REST_Defects",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
 	"properties": {
 		"annotations": [],
 		"type": "RestService",
 		"typeProperties": {
 			"url": "https://engine.pegasuswork.com/powerbi_api",
 			"enableServerCertificateValidation": true,
-			"authenticationType": "Anonymous"
+			"authenticationType": "Anonymous",
+			"authHeaders": {
+				"APIKey": {
+					"type": "SecureString",
+					"value": "**********"
+				}
+			}
 		}
 	}
 }
