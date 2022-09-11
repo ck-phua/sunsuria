@@ -1,0 +1,34 @@
+{
+	"name": "Stg_Projects",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "SunsuriaDM",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "id",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "name",
+				"type": "nvarchar"
+			},
+			{
+				"name": "address",
+				"type": "nvarchar"
+			},
+			{
+				"name": "stage",
+				"type": "nvarchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "Stg_MyTaman_Projects"
+		}
+	}
+}

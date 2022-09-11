@@ -1,0 +1,21 @@
+{
+	"name": "Defects_Projects_List",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "REST_Defects",
+			"type": "LinkedServiceReference",
+			"parameters": {
+				"auth_token": {
+					"type": "SecureString",
+					"value": "**********"
+				}
+			}
+		},
+		"annotations": [],
+		"type": "RestResource",
+		"typeProperties": {
+			"relativeUrl": "projects_list?auth_token=ajDAiGUgqYjz5HwHVYD61ccm"
+		},
+		"schema": []
+	}
+}

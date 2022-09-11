@@ -1,0 +1,160 @@
+{
+	"name": "LoadDefects",
+	"properties": {
+		"activities": [
+			{
+				"name": "Load Projects",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "RestSource",
+						"httpRequestTimeout": "00:01:40",
+						"requestInterval": "00.00:00:00.010",
+						"requestMethod": "GET",
+						"paginationRules": {
+							"supportRFC5988": "true"
+						}
+					},
+					"sink": {
+						"type": "AzureSqlSink",
+						"preCopyScript": "DELETE Stg_MyTaman_Projects",
+						"writeBehavior": "insert",
+						"sqlWriterUseTableLock": false,
+						"disableMetricsCollection": false
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"path": "['id']"
+								},
+								"sink": {
+									"name": "id",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"path": "['name']"
+								},
+								"sink": {
+									"name": "name",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "['stage']"
+								},
+								"sink": {
+									"name": "stage",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "['address']"
+								},
+								"sink": {
+									"name": "address",
+									"type": "String"
+								}
+							}
+						],
+						"collectionReference": "$['projects']"
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "Defects_Projects_List",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "Stg_Projects",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "Copy to MyTaman_Projects",
+				"type": "Script",
+				"dependsOn": [
+					{
+						"activity": "Load Projects",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"linkedServiceName": {
+					"referenceName": "SunsuriaDM",
+					"type": "LinkedServiceReference"
+				},
+				"typeProperties": {
+					"scripts": [
+						{
+							"type": "NonQuery",
+							"text": "BEGIN TRAN\n   DELETE MyTaman_Projects;\n   INSERT MyTaman_Projects SELECT * FROM Stg_MyTaman_Projects;\nCOMMIT\n"
+						}
+					]
+				}
+			},
+			{
+				"name": "Script1",
+				"type": "Script",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"linkedServiceName": {
+					"referenceName": "SunsuriaDM",
+					"type": "LinkedServiceReference"
+				},
+				"typeProperties": {
+					"scripts": [
+						{
+							"parameters": [
+								{
+									"name": "LastUpdatedDate",
+									"type": "String",
+									"value": "",
+									"direction": "Output",
+									"size": "255"
+								}
+							],
+							"type": "Query",
+							"text": "SELECT MAX(updated_at) AS LastUpdatedDate\nFROM MyTaman_Defects\n"
+						}
+					]
+				}
+			}
+		],
+		"annotations": []
+	}
+}
