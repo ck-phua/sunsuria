@@ -1,0 +1,76 @@
+{
+	"name": "pipeline1",
+	"properties": {
+		"activities": [
+			{
+				"name": "GetLastUpdatedDate",
+				"type": "Script",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"linkedServiceName": {
+					"referenceName": "SunsuriaDM",
+					"type": "LinkedServiceReference"
+				},
+				"typeProperties": {
+					"scripts": [
+						{
+							"parameters": [
+								{
+									"name": "LastUpdatedDate",
+									"type": "String",
+									"value": "",
+									"direction": "Output",
+									"size": "255"
+								}
+							],
+							"type": "Query",
+							"text": "SELECT MAX(updated_at) AS LastUpdatedDate\nFROM MyTaman_Defects\n"
+						}
+					]
+				}
+			},
+			{
+				"name": "GetLastUpdatedDate_copy1",
+				"type": "Script",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"linkedServiceName": {
+					"referenceName": "SunsuriaDM",
+					"type": "LinkedServiceReference"
+				},
+				"typeProperties": {
+					"scripts": [
+						{
+							"parameters": [
+								{
+									"name": "LastUpdatedDate",
+									"type": "String",
+									"value": "",
+									"direction": "Output",
+									"size": "255"
+								}
+							],
+							"type": "Query",
+							"text": "SELECT MAX(updated_at) AS LastUpdatedDate\nFROM MyTaman_Defects\n"
+						}
+					]
+				}
+			}
+		],
+		"annotations": []
+	}
+}
