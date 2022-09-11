@@ -6,15 +6,18 @@
 			"type": "LinkedServiceReference"
 		},
 		"parameters": {
-			"q[updated_at_gteq]": {
+			"last_updated": {
 				"type": "string",
-				"defaultValue": "2022-10-01"
+				"defaultValue": "2022-09-01"
 			}
 		},
 		"annotations": [],
 		"type": "RestResource",
 		"typeProperties": {
-			"relativeUrl": "work_orders_list?auth_token=ajDAiGUgqYjz5HwHVYD61ccm"
+			"relativeUrl": {
+				"value": "@concat('work_orders_list?auth_token=ajDAiGUgqYjz5HwHVYD61ccm&q[updated_at_gteq]=', dataset().last_updated)",
+				"type": "Expression"
+			}
 		},
 		"schema": []
 	}
