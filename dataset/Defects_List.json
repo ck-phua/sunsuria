@@ -15,7 +15,7 @@
 		"type": "RestResource",
 		"typeProperties": {
 			"relativeUrl": {
-				"value": "@concat('work_orders_list?auth_token=ajDAiGUgqYjz5HwHVYD61ccm&q[updated_at_gteq]=', dataset().last_updated)",
+				"value": "@concat('work_orders_list?auth_token=ajDAiGUgqYjz5HwHVYD61ccm&no_pagination=true&q[updated_at_gteq]=', dataset().last_updated)",
 				"type": "Expression"
 			}
 		},
