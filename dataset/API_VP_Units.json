@@ -1,0 +1,28 @@
+{
+	"name": "API_VP_Units",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "REST_VP",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"hash": {
+				"type": "string",
+				"defaultValue": "hash=CX3QfnaR9CjYStUabZtkL5NYeP8w3zM9W77N3zZFQGgghPj2WkbWemGEWntGhkW4xLvD4RnNuAfnTZMyN3B5Rn5gP3dJgMBdmjcYcXvbJkT5mREgVKCzkRkH5HzfUp3p"
+			},
+			"companyid": {
+				"type": "string",
+				"defaultValue": "&company_id=6"
+			}
+		},
+		"annotations": [],
+		"type": "RestResource",
+		"typeProperties": {
+			"relativeUrl": {
+				"value": "@concat('vp-status-by-company?',dataset().hash,dataset().companyid)",
+				"type": "Expression"
+			}
+		},
+		"schema": []
+	}
+}
