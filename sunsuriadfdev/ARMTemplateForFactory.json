@@ -21,34 +21,6 @@
 	},
 	"resources": [
 		{
-			"name": "[concat(parameters('factoryName'), '/REST_Defects')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "RestService",
-				"typeProperties": {
-					"url": "[parameters('REST_Defects_properties_typeProperties_url')]",
-					"enableServerCertificateValidation": true,
-					"authenticationType": "Anonymous"
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/SunsuriaDM')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "AzureSqlDatabase",
-				"typeProperties": {
-					"connectionString": "[parameters('SunsuriaDM_connectionString')]"
-				}
-			},
-			"dependsOn": []
-		},
-		{
 			"name": "[concat(parameters('factoryName'), '/LoadDefects')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
@@ -860,6 +832,123 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/pipeline1')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "GetLastUpdatedDate",
+						"type": "Script",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"linkedServiceName": {
+							"referenceName": "SunsuriaDM",
+							"type": "LinkedServiceReference"
+						},
+						"typeProperties": {
+							"scripts": [
+								{
+									"parameters": [
+										{
+											"name": "LastUpdatedDate",
+											"type": "String",
+											"value": "",
+											"direction": "Output",
+											"size": "255"
+										}
+									],
+									"type": "Query",
+									"text": "SELECT MAX(updated_at) AS LastUpdatedDate FROM MyTaman_Defects\n"
+								}
+							]
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/SunsuriaDM')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/API_Defects_Forms')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "REST_Defects",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"last_updated": {
+						"type": "string",
+						"defaultValue": "2022-09-01"
+					},
+					"auth_nopage": {
+						"type": "string",
+						"defaultValue": "auth_token=ajDAiGUgqYjz5HwHVYD61ccm&no_pagination=true"
+					}
+				},
+				"annotations": [],
+				"type": "RestResource",
+				"typeProperties": {
+					"relativeUrl": {
+						"value": "@concat('vacant_possessions_list?',dataset().auth_nopage,'&q[updated_at_gteq]=', dataset().last_updated)",
+						"type": "Expression"
+					}
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/REST_Defects')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/API_Defects_List')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "REST_Defects",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"last_updated": {
+						"type": "string",
+						"defaultValue": "2022-09-01"
+					},
+					"auth_nopage": {
+						"type": "string",
+						"defaultValue": "auth_token=ajDAiGUgqYjz5HwHVYD61ccm&no_pagination=true"
+					}
+				},
+				"annotations": [],
+				"type": "RestResource",
+				"typeProperties": {
+					"relativeUrl": {
+						"value": "@concat('work_orders_list?',dataset().auth_nopage,'&q[updated_at_gteq]=', dataset().last_updated)",
+						"type": "Expression"
+					}
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/REST_Defects')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/API_Defects_ProjectsList')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -872,6 +961,35 @@
 				"type": "RestResource",
 				"typeProperties": {
 					"relativeUrl": "projects_list?auth_token=ajDAiGUgqYjz5HwHVYD61ccm"
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/REST_Defects')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/API_Defects_Units')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "REST_Defects",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"auth_nopage": {
+						"type": "string",
+						"defaultValue": "auth_token=ajDAiGUgqYjz5HwHVYD61ccm&no_pagination=true"
+					}
+				},
+				"annotations": [],
+				"type": "RestResource",
+				"typeProperties": {
+					"relativeUrl": {
+						"value": "@concat('unit_owners_list?',dataset().auth_nopage)",
+						"type": "Expression"
+					}
 				},
 				"schema": []
 			},
@@ -963,6 +1081,70 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/Stg_Forms')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "SunsuriaDM",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "id",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "unit_owner_id",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "status",
+						"type": "nvarchar"
+					},
+					{
+						"name": "sign_off_date",
+						"type": "nvarchar"
+					},
+					{
+						"name": "complete_date",
+						"type": "nvarchar"
+					},
+					{
+						"name": "closed_date",
+						"type": "nvarchar"
+					},
+					{
+						"name": "stage",
+						"type": "nvarchar"
+					},
+					{
+						"name": "project_id",
+						"type": "nvarchar"
+					},
+					{
+						"name": "created_at",
+						"type": "nvarchar"
+					},
+					{
+						"name": "updated_at",
+						"type": "nvarchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "Stg_MyTaman_Forms"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/SunsuriaDM')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/Stg_Projects')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -996,90 +1178,6 @@
 					"schema": "dbo",
 					"table": "Stg_MyTaman_Projects"
 				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/SunsuriaDM')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/API_Defects_List')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "REST_Defects",
-					"type": "LinkedServiceReference"
-				},
-				"parameters": {
-					"last_updated": {
-						"type": "string",
-						"defaultValue": "2022-09-01"
-					},
-					"auth_nopage": {
-						"type": "string",
-						"defaultValue": "auth_token=ajDAiGUgqYjz5HwHVYD61ccm&no_pagination=true"
-					}
-				},
-				"annotations": [],
-				"type": "RestResource",
-				"typeProperties": {
-					"relativeUrl": {
-						"value": "@concat('work_orders_list?',dataset().auth_nopage,'&q[updated_at_gteq]=', dataset().last_updated)",
-						"type": "Expression"
-					}
-				},
-				"schema": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/REST_Defects')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/pipeline1')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "GetLastUpdatedDate",
-						"type": "Script",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "0.12:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"linkedServiceName": {
-							"referenceName": "SunsuriaDM",
-							"type": "LinkedServiceReference"
-						},
-						"typeProperties": {
-							"scripts": [
-								{
-									"parameters": [
-										{
-											"name": "LastUpdatedDate",
-											"type": "String",
-											"value": "",
-											"direction": "Output",
-											"size": "255"
-										}
-									],
-									"type": "Query",
-									"text": "SELECT MAX(updated_at) AS LastUpdatedDate FROM MyTaman_Defects\n"
-								}
-							]
-						}
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {},
-					"cancelAfter": {}
-				},
-				"annotations": []
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/SunsuriaDM')]"
@@ -1154,130 +1252,32 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/API_Defects_Units')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
+			"name": "[concat(parameters('factoryName'), '/REST_Defects')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
 			"properties": {
-				"linkedServiceName": {
-					"referenceName": "REST_Defects",
-					"type": "LinkedServiceReference"
-				},
-				"parameters": {
-					"auth_nopage": {
-						"type": "string",
-						"defaultValue": "auth_token=ajDAiGUgqYjz5HwHVYD61ccm&no_pagination=true"
-					}
-				},
 				"annotations": [],
-				"type": "RestResource",
+				"type": "RestService",
 				"typeProperties": {
-					"relativeUrl": {
-						"value": "@concat('unit_owners_list?',dataset().auth_nopage)",
-						"type": "Expression"
-					}
-				},
-				"schema": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/REST_Defects')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/Stg_Forms')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "SunsuriaDM",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "AzureSqlTable",
-				"schema": [
-					{
-						"name": "id",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "unit_owner_id",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "status",
-						"type": "nvarchar"
-					},
-					{
-						"name": "sign_off_date",
-						"type": "nvarchar"
-					},
-					{
-						"name": "complete_date",
-						"type": "nvarchar"
-					},
-					{
-						"name": "closed_date",
-						"type": "nvarchar"
-					},
-					{
-						"name": "stage",
-						"type": "nvarchar"
-					},
-					{
-						"name": "project_id",
-						"type": "nvarchar"
-					},
-					{
-						"name": "created_at",
-						"type": "nvarchar"
-					},
-					{
-						"name": "updated_at",
-						"type": "nvarchar"
-					}
-				],
-				"typeProperties": {
-					"schema": "dbo",
-					"table": "Stg_MyTaman_Forms"
+					"url": "[parameters('REST_Defects_properties_typeProperties_url')]",
+					"enableServerCertificateValidation": true,
+					"authenticationType": "Anonymous"
 				}
 			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/SunsuriaDM')]"
-			]
+			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/API_Defects_Forms')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
+			"name": "[concat(parameters('factoryName'), '/SunsuriaDM')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
 			"properties": {
-				"linkedServiceName": {
-					"referenceName": "REST_Defects",
-					"type": "LinkedServiceReference"
-				},
-				"parameters": {
-					"last_updated": {
-						"type": "string",
-						"defaultValue": "2022-09-01"
-					},
-					"auth_nopage": {
-						"type": "string",
-						"defaultValue": "auth_token=ajDAiGUgqYjz5HwHVYD61ccm&no_pagination=true"
-					}
-				},
 				"annotations": [],
-				"type": "RestResource",
+				"type": "AzureSqlDatabase",
 				"typeProperties": {
-					"relativeUrl": {
-						"value": "@concat('vacant_possessions_list?',dataset().auth_nopage,'&q[updated_at_gteq]=', dataset().last_updated)",
-						"type": "Expression"
-					}
-				},
-				"schema": []
+					"connectionString": "[parameters('SunsuriaDM_connectionString')]"
+				}
 			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/REST_Defects')]"
-			]
+			"dependsOn": []
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/Daily')]",
@@ -1304,10 +1304,10 @@
 						"timeZone": "Singapore Standard Time",
 						"schedule": {
 							"minutes": [
-								0
+								10
 							],
 							"hours": [
-								19
+								20
 							]
 						}
 					}
