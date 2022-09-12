@@ -77,7 +77,7 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "Defects_Projects_List",
+						"referenceName": "API_Defects_ProjectsList",
 						"type": "DatasetReference"
 					}
 				],
@@ -335,7 +335,7 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "Defects_List",
+						"referenceName": "API_Defects_List",
 						"type": "DatasetReference",
 						"parameters": {
 							"last_updated": {
@@ -379,6 +379,92 @@
 					"referenceName": "SunsuriaDM",
 					"type": "LinkedServiceReference"
 				}
+			},
+			{
+				"name": "Load Units",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"sink": {
+						"type": "AzureSqlSink",
+						"preCopyScript": "DELETE Stg_MyTaman_Projects",
+						"writeBehavior": "insert",
+						"sqlWriterUseTableLock": false,
+						"disableMetricsCollection": false
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"path": "['id']"
+								},
+								"sink": {
+									"name": "id",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"path": "['name']"
+								},
+								"sink": {
+									"name": "name",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "['stage']"
+								},
+								"sink": {
+									"name": "stage",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "['address']"
+								},
+								"sink": {
+									"name": "address",
+									"type": "String"
+								}
+							}
+						],
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "Stg_Units",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "Stg_Units",
+						"type": "DatasetReference"
+					}
+				]
 			}
 		],
 		"annotations": []

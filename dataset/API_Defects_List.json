@@ -1,5 +1,5 @@
 {
-	"name": "Defects_List",
+	"name": "API_Defects_List",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "REST_Defects",

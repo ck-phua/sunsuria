@@ -1,0 +1,63 @@
+{
+	"name": "Stg_Units",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "SunsuriaDM",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "id",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "unit_number",
+				"type": "nvarchar"
+			},
+			{
+				"name": "unit_address",
+				"type": "nvarchar"
+			},
+			{
+				"name": "unit_block",
+				"type": "nvarchar"
+			},
+			{
+				"name": "unit_level",
+				"type": "nvarchar"
+			},
+			{
+				"name": "owner_name",
+				"type": "nvarchar"
+			},
+			{
+				"name": "owner_address",
+				"type": "nvarchar"
+			},
+			{
+				"name": "owner_contact",
+				"type": "nvarchar"
+			},
+			{
+				"name": "owner_email",
+				"type": "nvarchar"
+			},
+			{
+				"name": "defects_liability_start_date",
+				"type": "nvarchar"
+			},
+			{
+				"name": "project_id",
+				"type": "int",
+				"precision": 10
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "Stg_MyTaman_Units"
+		}
+	}
+}
