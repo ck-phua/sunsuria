@@ -1,0 +1,12 @@
+{
+	"name": "REST_VP",
+	"properties": {
+		"annotations": [],
+		"type": "RestService",
+		"typeProperties": {
+			"url": "https://vp.pegasuswork.com/api/v4/en/powerbi-api",
+			"enableServerCertificateValidation": true,
+			"authenticationType": "Anonymous"
+		}
+	}
+}
