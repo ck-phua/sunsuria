@@ -1,0 +1,130 @@
+{
+	"name": "Stg_VP_Units",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "SunsuriaDM",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "id",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "customer_id",
+				"type": "nvarchar"
+			},
+			{
+				"name": "company_id",
+				"type": "nvarchar"
+			},
+			{
+				"name": "project_id",
+				"type": "nvarchar"
+			},
+			{
+				"name": "phase_id",
+				"type": "nvarchar"
+			},
+			{
+				"name": "vp_status",
+				"type": "nvarchar"
+			},
+			{
+				"name": "loan_drawdown",
+				"type": "nvarchar"
+			},
+			{
+				"name": "payment_status",
+				"type": "nvarchar"
+			},
+			{
+				"name": "slot_id",
+				"type": "nvarchar"
+			},
+			{
+				"name": "appointment_date_time",
+				"type": "nvarchar"
+			},
+			{
+				"name": "vp_inventory_checklist_done",
+				"type": "nvarchar"
+			},
+			{
+				"name": "vp_survey_done",
+				"type": "nvarchar"
+			},
+			{
+				"name": "key_collected",
+				"type": "nvarchar"
+			},
+			{
+				"name": "vp_date",
+				"type": "nvarchar"
+			},
+			{
+				"name": "unit_code",
+				"type": "nvarchar"
+			},
+			{
+				"name": "unit_name",
+				"type": "nvarchar"
+			},
+			{
+				"name": "lot_address",
+				"type": "nvarchar"
+			},
+			{
+				"name": "buyer",
+				"type": "nvarchar"
+			},
+			{
+				"name": "authorized_name",
+				"type": "nvarchar"
+			},
+			{
+				"name": "authorized_contact",
+				"type": "nvarchar"
+			},
+			{
+				"name": "authorized_email",
+				"type": "nvarchar"
+			},
+			{
+				"name": "authorized_nric",
+				"type": "nvarchar"
+			},
+			{
+				"name": "mobile_phone",
+				"type": "nvarchar"
+			},
+			{
+				"name": "email",
+				"type": "nvarchar"
+			},
+			{
+				"name": "address",
+				"type": "nvarchar"
+			},
+			{
+				"name": "company_name",
+				"type": "nvarchar"
+			},
+			{
+				"name": "project_name",
+				"type": "nvarchar"
+			},
+			{
+				"name": "phase_name",
+				"type": "nvarchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "Stg_MyTaman_VP_Units"
+		}
+	}
+}
