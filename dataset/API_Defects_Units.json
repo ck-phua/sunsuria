@@ -1,0 +1,24 @@
+{
+	"name": "API_Defects_Units",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "REST_Defects",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"auth_nopage": {
+				"type": "string",
+				"defaultValue": "auth_token=ajDAiGUgqYjz5HwHVYD61ccm&no_pagination=true"
+			}
+		},
+		"annotations": [],
+		"type": "RestResource",
+		"typeProperties": {
+			"relativeUrl": {
+				"value": "@concat('unit_owners_list?',dataset().auth_nopage)",
+				"type": "Expression"
+			}
+		},
+		"schema": []
+	}
+}
