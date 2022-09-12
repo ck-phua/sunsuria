@@ -5,14 +5,7 @@
 			{
 				"name": "Load Projects",
 				"type": "Copy",
-				"dependsOn": [
-					{
-						"activity": "Exec Insert Defects",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
+				"dependsOn": [],
 				"policy": {
 					"timeout": "0.12:00:00",
 					"retry": 0,
@@ -130,14 +123,7 @@
 			{
 				"name": "GetLastUpdatedDate",
 				"type": "Script",
-				"dependsOn": [
-					{
-						"activity": "Copy to MyTaman_Units",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
+				"dependsOn": [],
 				"policy": {
 					"timeout": "0.12:00:00",
 					"retry": 0,
@@ -397,14 +383,7 @@
 			{
 				"name": "Load Units",
 				"type": "Copy",
-				"dependsOn": [
-					{
-						"activity": "Exec Insert Forms",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
+				"dependsOn": [],
 				"policy": {
 					"timeout": "0.12:00:00",
 					"retry": 0,
