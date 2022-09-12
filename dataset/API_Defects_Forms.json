@@ -1,0 +1,28 @@
+{
+	"name": "API_Defects_Forms",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "REST_Defects",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"last_updated": {
+				"type": "string",
+				"defaultValue": "2022-09-01"
+			},
+			"auth_nopage": {
+				"type": "string",
+				"defaultValue": "auth_token=ajDAiGUgqYjz5HwHVYD61ccm&no_pagination=true"
+			}
+		},
+		"annotations": [],
+		"type": "RestResource",
+		"typeProperties": {
+			"relativeUrl": {
+				"value": "@concat('vacant_possessions_list?',dataset().auth_nopage,'&q[updated_at_gteq]=', dataset().last_updated)",
+				"type": "Expression"
+			}
+		},
+		"schema": []
+	}
+}
