@@ -23,6 +23,10 @@
 						{
 							"type": "Query",
 							"text": "SELECT id FROM MyTaman_VP_Companies\n"
+						},
+						{
+							"type": "NonQuery",
+							"text": "DELETE Stg_MyTaman_VP_Units"
 						}
 					]
 				}
@@ -46,29 +50,9 @@
 					},
 					"activities": [
 						{
-							"name": "Set variable1",
-							"type": "SetVariable",
-							"dependsOn": [],
-							"userProperties": [],
-							"typeProperties": {
-								"variableName": "companyid",
-								"value": {
-									"value": "@string(item().id)",
-									"type": "Expression"
-								}
-							}
-						},
-						{
 							"name": "Copy data2",
 							"type": "Copy",
-							"dependsOn": [
-								{
-									"activity": "Set variable1",
-									"dependencyConditions": [
-										"Succeeded"
-									]
-								}
-							],
+							"dependsOn": [],
 							"policy": {
 								"timeout": "0.12:00:00",
 								"retry": 0,
@@ -371,6 +355,38 @@
 									"type": "DatasetReference"
 								}
 							]
+						}
+					]
+				}
+			},
+			{
+				"name": "Copy to VP_Units",
+				"type": "Script",
+				"dependsOn": [
+					{
+						"activity": "ForEach1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"linkedServiceName": {
+					"referenceName": "SunsuriaDM",
+					"type": "LinkedServiceReference"
+				},
+				"typeProperties": {
+					"scripts": [
+						{
+							"type": "NonQuery",
+							"text": "BEGIN TRAN\n   DELETE [MyTaman_VP_Units];\n   INSERT [MyTaman_VP_Units]\n   SELECT * FROM [Stg_MyTaman_VP_Units] WHERE id IS NOT NULL;\nCOMMIT\n\n"
 						}
 					]
 				}
