@@ -5,7 +5,14 @@
 			{
 				"name": "Load Projects",
 				"type": "Copy",
-				"dependsOn": [],
+				"dependsOn": [
+					{
+						"activity": "Exec Insert Defects",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
 				"policy": {
 					"timeout": "0.12:00:00",
 					"retry": 0,
@@ -123,7 +130,14 @@
 			{
 				"name": "GetLastUpdatedDate",
 				"type": "Script",
-				"dependsOn": [],
+				"dependsOn": [
+					{
+						"activity": "Copy to MyTaman_Units",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
 				"policy": {
 					"timeout": "0.12:00:00",
 					"retry": 0,
@@ -394,13 +408,17 @@
 				"userProperties": [],
 				"typeProperties": {
 					"source": {
-						"type": "AzureSqlSource",
-						"queryTimeout": "02:00:00",
-						"partitionOption": "None"
+						"type": "RestSource",
+						"httpRequestTimeout": "00:01:40",
+						"requestInterval": "00.00:00:00.010",
+						"requestMethod": "GET",
+						"paginationRules": {
+							"supportRFC5988": "true"
+						}
 					},
 					"sink": {
 						"type": "AzureSqlSink",
-						"preCopyScript": "DELETE Stg_MyTaman_Projects",
+						"preCopyScript": "DELETE Stg_MyTaman_Units",
 						"writeBehavior": "insert",
 						"sqlWriterUseTableLock": false,
 						"disableMetricsCollection": false
@@ -420,43 +438,105 @@
 							},
 							{
 								"source": {
-									"path": "['name']"
+									"path": "['unit_number']"
 								},
 								"sink": {
-									"name": "name",
+									"name": "unit_number",
 									"type": "String"
 								}
 							},
 							{
 								"source": {
-									"path": "['stage']"
+									"path": "['unit_address']"
 								},
 								"sink": {
-									"name": "stage",
+									"name": "unit_address",
 									"type": "String"
 								}
 							},
 							{
 								"source": {
-									"path": "['address']"
+									"path": "['unit_block']"
 								},
 								"sink": {
-									"name": "address",
+									"name": "unit_block",
 									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "['unit_level']"
+								},
+								"sink": {
+									"name": "unit_level",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "['owner_name']"
+								},
+								"sink": {
+									"name": "owner_name",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "['owner_address']"
+								},
+								"sink": {
+									"name": "owner_address",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "['owner_contact']"
+								},
+								"sink": {
+									"name": "owner_contact",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "['owner_email']"
+								},
+								"sink": {
+									"name": "owner_email",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "['defects_liability_start_date']"
+								},
+								"sink": {
+									"name": "defects_liability_start_date",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "['project_id']"
+								},
+								"sink": {
+									"name": "project_id",
+									"type": "Int32"
 								}
 							}
 						],
-						"typeConversion": true,
-						"typeConversionSettings": {
-							"allowDataTruncation": true,
-							"treatBooleanAsNumber": false
-						}
+						"collectionReference": "$['unit_owners']"
 					}
 				},
 				"inputs": [
 					{
-						"referenceName": "Stg_Units",
-						"type": "DatasetReference"
+						"referenceName": "API_Defects_Units",
+						"type": "DatasetReference",
+						"parameters": {
+							"auth_nopage": "auth_token=ajDAiGUgqYjz5HwHVYD61ccm&no_pagination=true"
+						}
 					}
 				],
 				"outputs": [
@@ -465,6 +545,76 @@
 						"type": "DatasetReference"
 					}
 				]
+			},
+			{
+				"name": "Copy to MyTaman_Units",
+				"type": "Script",
+				"dependsOn": [
+					{
+						"activity": "Load Units",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"linkedServiceName": {
+					"referenceName": "SunsuriaDM",
+					"type": "LinkedServiceReference"
+				},
+				"typeProperties": {
+					"scripts": [
+						{
+							"type": "NonQuery",
+							"text": "BEGIN TRAN\n   DELETE MyTaman_Units;\n   INSERT MyTaman_Units SELECT * FROM [Stg_MyTaman_Units];\nCOMMIT"
+						},
+						{
+							"type": "NonQuery",
+							"text": "-- Convert Unit Level for MONET GARDEN (fix data issue from source)\nUPDATE [MyTaman_Units]\nSET unit_level = 'TERRACE'\nWHERE project_id = 92 AND unit_level = 'NA'\n"
+						}
+					]
+				}
+			},
+			{
+				"name": "GetLastUpdatedDate_Forms",
+				"type": "Script",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"linkedServiceName": {
+					"referenceName": "SunsuriaDM",
+					"type": "LinkedServiceReference"
+				},
+				"typeProperties": {
+					"scripts": [
+						{
+							"parameters": [
+								{
+									"name": "LastUpdatedDate",
+									"type": "String",
+									"value": "",
+									"direction": "Output",
+									"size": "255"
+								}
+							],
+							"type": "Query",
+							"text": "SELECT MAX(updated_at) + '.' AS LastUpdatedDate FROM MyTaman_Forms\n"
+						}
+					]
+				}
 			}
 		],
 		"annotations": []

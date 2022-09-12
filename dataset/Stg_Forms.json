@@ -1,0 +1,59 @@
+{
+	"name": "Stg_Forms",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "SunsuriaDM",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "id",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "unit_owner_id",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "status",
+				"type": "nvarchar"
+			},
+			{
+				"name": "sign_off_date",
+				"type": "nvarchar"
+			},
+			{
+				"name": "complete_date",
+				"type": "nvarchar"
+			},
+			{
+				"name": "closed_date",
+				"type": "nvarchar"
+			},
+			{
+				"name": "stage",
+				"type": "nvarchar"
+			},
+			{
+				"name": "project_id",
+				"type": "nvarchar"
+			},
+			{
+				"name": "created_at",
+				"type": "nvarchar"
+			},
+			{
+				"name": "updated_at",
+				"type": "nvarchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "Stg_MyTaman_Forms"
+		}
+	}
+}
