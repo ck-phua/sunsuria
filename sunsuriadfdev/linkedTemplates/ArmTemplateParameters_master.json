@@ -11,6 +11,9 @@
 		"REST_Defects_properties_typeProperties_url": {
 			"value": "https://engine.pegasuswork.com/powerbi_api"
 		},
+		"REST_VP_properties_typeProperties_url": {
+			"value": "https://vp.pegasuswork.com/api/v4/en/powerbi-api"
+		},
 		"containerUri": {
 			"value": ""
 		},

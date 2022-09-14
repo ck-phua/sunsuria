@@ -14,6 +14,10 @@
 		"REST_Defects_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://engine.pegasuswork.com/powerbi_api"
+		},
+		"REST_VP_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://vp.pegasuswork.com/api/v4/en/powerbi-api"
 		}
 	},
 	"variables": {
@@ -832,6 +836,420 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/LoadVP')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "GetCompanyIDs",
+						"type": "Script",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"linkedServiceName": {
+							"referenceName": "SunsuriaDM",
+							"type": "LinkedServiceReference"
+						},
+						"typeProperties": {
+							"scripts": [
+								{
+									"type": "Query",
+									"text": "SELECT id FROM MyTaman_VP_Companies\n"
+								},
+								{
+									"type": "NonQuery",
+									"text": "DELETE Stg_MyTaman_VP_Units"
+								}
+							]
+						}
+					},
+					{
+						"name": "ForEach1",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "GetCompanyIDs",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('GetCompanyIDs').output.resultSets[0].Rows",
+								"type": "Expression"
+							},
+							"activities": [
+								{
+									"name": "Copy data2",
+									"type": "Copy",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "0.12:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"source": {
+											"type": "RestSource",
+											"httpRequestTimeout": "00:01:40",
+											"requestInterval": "00.00:00:00.010",
+											"requestMethod": "POST",
+											"paginationRules": {
+												"supportRFC5988": "true"
+											}
+										},
+										"sink": {
+											"type": "AzureSqlSink",
+											"writeBehavior": "insert",
+											"sqlWriterUseTableLock": false
+										},
+										"enableStaging": false,
+										"translator": {
+											"type": "TabularTranslator",
+											"mappings": [
+												{
+													"source": {
+														"path": "[['id']"
+													},
+													"sink": {
+														"name": "id",
+														"type": "Int32"
+													}
+												},
+												{
+													"source": {
+														"path": "[['customer_id']"
+													},
+													"sink": {
+														"name": "customer_id",
+														"type": "String"
+													}
+												},
+												{
+													"source": {
+														"path": "[['company_id']"
+													},
+													"sink": {
+														"name": "company_id",
+														"type": "String"
+													}
+												},
+												{
+													"source": {
+														"path": "[['project_id']"
+													},
+													"sink": {
+														"name": "project_id",
+														"type": "String"
+													}
+												},
+												{
+													"source": {
+														"path": "[['phase_id']"
+													},
+													"sink": {
+														"name": "phase_id",
+														"type": "String"
+													}
+												},
+												{
+													"source": {
+														"path": "[['vp_status']"
+													},
+													"sink": {
+														"name": "vp_status",
+														"type": "String"
+													}
+												},
+												{
+													"source": {
+														"path": "[['loan_drawdown']"
+													},
+													"sink": {
+														"name": "loan_drawdown",
+														"type": "String"
+													}
+												},
+												{
+													"source": {
+														"path": "[['payment_status']"
+													},
+													"sink": {
+														"name": "payment_status",
+														"type": "String"
+													}
+												},
+												{
+													"source": {
+														"path": "[['slot_id']"
+													},
+													"sink": {
+														"name": "slot_id",
+														"type": "String"
+													}
+												},
+												{
+													"source": {
+														"path": "[['appointment_date_time']"
+													},
+													"sink": {
+														"name": "appointment_date_time",
+														"type": "String"
+													}
+												},
+												{
+													"source": {
+														"path": "[['vp_inventory_checklist_done']"
+													},
+													"sink": {
+														"name": "vp_inventory_checklist_done",
+														"type": "String"
+													}
+												},
+												{
+													"source": {
+														"path": "[['vp_survey_done']"
+													},
+													"sink": {
+														"name": "vp_survey_done",
+														"type": "String"
+													}
+												},
+												{
+													"source": {
+														"path": "[['key_collected']"
+													},
+													"sink": {
+														"name": "key_collected",
+														"type": "String"
+													}
+												},
+												{
+													"source": {
+														"path": "[['vp_date']"
+													},
+													"sink": {
+														"name": "vp_date",
+														"type": "String"
+													}
+												},
+												{
+													"source": {
+														"path": "[['unit_code']"
+													},
+													"sink": {
+														"name": "unit_code",
+														"type": "String"
+													}
+												},
+												{
+													"source": {
+														"path": "[['unit_name']"
+													},
+													"sink": {
+														"name": "unit_name",
+														"type": "String"
+													}
+												},
+												{
+													"source": {
+														"path": "[['lot_address']"
+													},
+													"sink": {
+														"name": "lot_address",
+														"type": "String"
+													}
+												},
+												{
+													"source": {
+														"path": "[['buyer']"
+													},
+													"sink": {
+														"name": "buyer",
+														"type": "String"
+													}
+												},
+												{
+													"source": {
+														"path": "[['authorized_name']"
+													},
+													"sink": {
+														"name": "authorized_name",
+														"type": "String"
+													}
+												},
+												{
+													"source": {
+														"path": "[['authorized_contact']"
+													},
+													"sink": {
+														"name": "authorized_contact",
+														"type": "String"
+													}
+												},
+												{
+													"source": {
+														"path": "[['authorized_email']"
+													},
+													"sink": {
+														"name": "authorized_email",
+														"type": "String"
+													}
+												},
+												{
+													"source": {
+														"path": "[['authorized_nric']"
+													},
+													"sink": {
+														"name": "authorized_nric",
+														"type": "String"
+													}
+												},
+												{
+													"source": {
+														"path": "[['mobile_phone']"
+													},
+													"sink": {
+														"name": "mobile_phone",
+														"type": "String"
+													}
+												},
+												{
+													"source": {
+														"path": "[['email']"
+													},
+													"sink": {
+														"name": "email",
+														"type": "String"
+													}
+												},
+												{
+													"source": {
+														"path": "[['address']"
+													},
+													"sink": {
+														"name": "address",
+														"type": "String"
+													}
+												},
+												{
+													"source": {
+														"path": "[['company_name']"
+													},
+													"sink": {
+														"name": "company_name",
+														"type": "String"
+													}
+												},
+												{
+													"source": {
+														"path": "[['project_name']"
+													},
+													"sink": {
+														"name": "project_name",
+														"type": "String"
+													}
+												},
+												{
+													"source": {
+														"path": "[['phase_name']"
+													},
+													"sink": {
+														"name": "phase_name",
+														"type": "String"
+													}
+												}
+											],
+											"collectionReference": "$['units']"
+										}
+									},
+									"inputs": [
+										{
+											"referenceName": "API_VP_Units",
+											"type": "DatasetReference",
+											"parameters": {
+												"hash": "hash=CX3QfnaR9CjYStUabZtkL5NYeP8w3zM9W77N3zZFQGgghPj2WkbWemGEWntGhkW4xLvD4RnNuAfnTZMyN3B5Rn5gP3dJgMBdmjcYcXvbJkT5mREgVKCzkRkH5HzfUp3p",
+												"companyid": {
+													"value": "@concat('&company_id=', item().id)",
+													"type": "Expression"
+												}
+											}
+										}
+									],
+									"outputs": [
+										{
+											"referenceName": "Stg_VP_Units",
+											"type": "DatasetReference",
+											"parameters": {}
+										}
+									]
+								}
+							]
+						}
+					},
+					{
+						"name": "Copy to VP_Units",
+						"type": "Script",
+						"dependsOn": [
+							{
+								"activity": "ForEach1",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"linkedServiceName": {
+							"referenceName": "SunsuriaDM",
+							"type": "LinkedServiceReference"
+						},
+						"typeProperties": {
+							"scripts": [
+								{
+									"type": "NonQuery",
+									"text": "BEGIN TRAN\n   DELETE [MyTaman_VP_Units];\n   INSERT [MyTaman_VP_Units]\n   SELECT * FROM [Stg_MyTaman_VP_Units] WHERE id IS NOT NULL;\nCOMMIT\n\n"
+								}
+							]
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"variables": {
+					"companyid": {
+						"type": "String"
+					}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/SunsuriaDM')]",
+				"[concat(variables('factoryId'), '/datasets/API_VP_Units')]",
+				"[concat(variables('factoryId'), '/datasets/Stg_VP_Units')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/pipeline1')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
@@ -995,6 +1413,39 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/REST_Defects')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/API_VP_Units')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "REST_VP",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"hash": {
+						"type": "string",
+						"defaultValue": "hash=CX3QfnaR9CjYStUabZtkL5NYeP8w3zM9W77N3zZFQGgghPj2WkbWemGEWntGhkW4xLvD4RnNuAfnTZMyN3B5Rn5gP3dJgMBdmjcYcXvbJkT5mREgVKCzkRkH5HzfUp3p"
+					},
+					"companyid": {
+						"type": "string",
+						"defaultValue": "&company_id=6"
+					}
+				},
+				"annotations": [],
+				"type": "RestResource",
+				"typeProperties": {
+					"relativeUrl": {
+						"value": "@concat('vp-status-by-company?',dataset().hash,dataset().companyid)",
+						"type": "Expression"
+					}
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/REST_VP')]"
 			]
 		},
 		{
@@ -1252,6 +1703,141 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/Stg_VP_Units')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "SunsuriaDM",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "id",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "customer_id",
+						"type": "nvarchar"
+					},
+					{
+						"name": "company_id",
+						"type": "nvarchar"
+					},
+					{
+						"name": "project_id",
+						"type": "nvarchar"
+					},
+					{
+						"name": "phase_id",
+						"type": "nvarchar"
+					},
+					{
+						"name": "vp_status",
+						"type": "nvarchar"
+					},
+					{
+						"name": "loan_drawdown",
+						"type": "nvarchar"
+					},
+					{
+						"name": "payment_status",
+						"type": "nvarchar"
+					},
+					{
+						"name": "slot_id",
+						"type": "nvarchar"
+					},
+					{
+						"name": "appointment_date_time",
+						"type": "nvarchar"
+					},
+					{
+						"name": "vp_inventory_checklist_done",
+						"type": "nvarchar"
+					},
+					{
+						"name": "vp_survey_done",
+						"type": "nvarchar"
+					},
+					{
+						"name": "key_collected",
+						"type": "nvarchar"
+					},
+					{
+						"name": "vp_date",
+						"type": "nvarchar"
+					},
+					{
+						"name": "unit_code",
+						"type": "nvarchar"
+					},
+					{
+						"name": "unit_name",
+						"type": "nvarchar"
+					},
+					{
+						"name": "lot_address",
+						"type": "nvarchar"
+					},
+					{
+						"name": "buyer",
+						"type": "nvarchar"
+					},
+					{
+						"name": "authorized_name",
+						"type": "nvarchar"
+					},
+					{
+						"name": "authorized_contact",
+						"type": "nvarchar"
+					},
+					{
+						"name": "authorized_email",
+						"type": "nvarchar"
+					},
+					{
+						"name": "authorized_nric",
+						"type": "nvarchar"
+					},
+					{
+						"name": "mobile_phone",
+						"type": "nvarchar"
+					},
+					{
+						"name": "email",
+						"type": "nvarchar"
+					},
+					{
+						"name": "address",
+						"type": "nvarchar"
+					},
+					{
+						"name": "company_name",
+						"type": "nvarchar"
+					},
+					{
+						"name": "project_name",
+						"type": "nvarchar"
+					},
+					{
+						"name": "phase_name",
+						"type": "nvarchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "Stg_MyTaman_VP_Units"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/SunsuriaDM')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/REST_Defects')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
@@ -1260,6 +1846,21 @@
 				"type": "RestService",
 				"typeProperties": {
 					"url": "[parameters('REST_Defects_properties_typeProperties_url')]",
+					"enableServerCertificateValidation": true,
+					"authenticationType": "Anonymous"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/REST_VP')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "RestService",
+				"typeProperties": {
+					"url": "[parameters('REST_VP_properties_typeProperties_url')]",
 					"enableServerCertificateValidation": true,
 					"authenticationType": "Anonymous"
 				}
@@ -1293,6 +1894,13 @@
 							"type": "PipelineReference"
 						},
 						"parameters": {}
+					},
+					{
+						"pipelineReference": {
+							"referenceName": "LoadVP",
+							"type": "PipelineReference"
+						},
+						"parameters": {}
 					}
 				],
 				"type": "ScheduleTrigger",
@@ -1314,7 +1922,8 @@
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/pipelines/LoadDefects')]"
+				"[concat(variables('factoryId'), '/pipelines/LoadDefects')]",
+				"[concat(variables('factoryId'), '/pipelines/LoadVP')]"
 			]
 		}
 	]
