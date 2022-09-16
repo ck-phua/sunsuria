@@ -1,0 +1,9 @@
+{
+	"name": "sunsuriadf01",
+	"location": "southeastasia",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "7d12687d-290d-4240-8daf-d2309c0fa749",
+		"tenantId": "6bb09f70-6763-47a2-a863-7dd629264568"
+	}
+}
