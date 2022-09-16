@@ -1,0 +1,1175 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name"
+		},
+		"SunsuriaDM": {
+			"type": "string"
+		},
+		"REST_Defects": {
+			"type": "string"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/LoadDefects')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Load Projects",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "RestSource",
+								"httpRequestTimeout": "00:01:40",
+								"requestInterval": "00.00:00:00.010",
+								"requestMethod": "GET",
+								"paginationRules": {
+									"supportRFC5988": "true"
+								}
+							},
+							"sink": {
+								"type": "AzureSqlSink",
+								"preCopyScript": "DELETE Stg_MyTaman_Projects",
+								"writeBehavior": "insert",
+								"sqlWriterUseTableLock": false,
+								"disableMetricsCollection": false
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"path": "[['id']"
+										},
+										"sink": {
+											"name": "id",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"path": "[['name']"
+										},
+										"sink": {
+											"name": "name",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "[['stage']"
+										},
+										"sink": {
+											"name": "stage",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "[['address']"
+										},
+										"sink": {
+											"name": "address",
+											"type": "String"
+										}
+									}
+								],
+								"collectionReference": "$['projects']"
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "API_Defects_ProjectsList",
+								"type": "DatasetReference"
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "Stg_Projects",
+								"type": "DatasetReference"
+							}
+						]
+					},
+					{
+						"name": "Copy to MyTaman_Projects",
+						"type": "Script",
+						"dependsOn": [
+							{
+								"activity": "Load Projects",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"linkedServiceName": {
+							"referenceName": "[parameters('SunsuriaDM')]",
+							"type": "LinkedServiceReference"
+						},
+						"typeProperties": {
+							"scripts": [
+								{
+									"type": "NonQuery",
+									"text": "BEGIN TRAN\n   DELETE MyTaman_Projects;\n   INSERT MyTaman_Projects SELECT * FROM Stg_MyTaman_Projects;\nCOMMIT\n"
+								}
+							]
+						}
+					},
+					{
+						"name": "GetLastUpdatedDate",
+						"type": "Script",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"linkedServiceName": {
+							"referenceName": "[parameters('SunsuriaDM')]",
+							"type": "LinkedServiceReference"
+						},
+						"typeProperties": {
+							"scripts": [
+								{
+									"parameters": [
+										{
+											"name": "LastUpdatedDate",
+											"type": "String",
+											"value": "",
+											"direction": "Output",
+											"size": "255"
+										}
+									],
+									"type": "Query",
+									"text": "SELECT MAX(updated_at) + '.' AS LastUpdatedDate FROM MyTaman_Defects\n"
+								}
+							]
+						}
+					},
+					{
+						"name": "Load Defect_List",
+						"type": "Copy",
+						"dependsOn": [
+							{
+								"activity": "GetLastUpdatedDate",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "RestSource",
+								"httpRequestTimeout": "00:01:40",
+								"requestInterval": "00.00:00:00.010",
+								"requestMethod": "GET",
+								"paginationRules": {
+									"supportRFC5988": "true"
+								}
+							},
+							"sink": {
+								"type": "AzureSqlSink",
+								"preCopyScript": "DELETE Stg_MyTaman_Defects",
+								"writeBehavior": "insert",
+								"sqlWriterUseTableLock": false,
+								"disableMetricsCollection": false
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"path": "[['id']"
+										},
+										"sink": {
+											"name": "id",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"path": "[['title']"
+										},
+										"sink": {
+											"name": "title",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "[['description']"
+										},
+										"sink": {
+											"name": "description",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "[['status']"
+										},
+										"sink": {
+											"name": "status",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "[['category_one']['name']"
+										},
+										"sink": {
+											"name": "category_one",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "[['category_two']['name']"
+										},
+										"sink": {
+											"name": "category_two",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "[['category_three']['name']"
+										},
+										"sink": {
+											"name": "category_three",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "[['category_four']['name']"
+										},
+										"sink": {
+											"name": "category_four",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "[['workflow_description']"
+										},
+										"sink": {
+											"name": "workflow_description",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "[['vacant_possession_id']"
+										},
+										"sink": {
+											"name": "vacant_possession_id",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "[['project_id']"
+										},
+										"sink": {
+											"name": "project_id",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "[['created_at']"
+										},
+										"sink": {
+											"name": "created_at",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "[['updated_at']"
+										},
+										"sink": {
+											"name": "updated_at",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "[['calculated_id']"
+										},
+										"sink": {
+											"name": "calculated_id",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "[['created_by']"
+										},
+										"sink": {
+											"name": "created_by",
+											"type": "String"
+										}
+									}
+								],
+								"collectionReference": "$['work_orders']"
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "API_Defects_List",
+								"type": "DatasetReference",
+								"parameters": {
+									"last_updated": {
+										"value": "@activity('GetLastUpdatedDate').output",
+										"type": "Expression"
+									},
+									"auth_nopage": "auth_token=ajDAiGUgqYjz5HwHVYD61ccm&no_pagination=true"
+								}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "Stg_Defects",
+								"type": "DatasetReference"
+							}
+						]
+					},
+					{
+						"name": "Exec Insert Defects",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [
+							{
+								"activity": "Load Defect_List",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[dbo].[Insert_MyTaman_Defects]"
+						},
+						"linkedServiceName": {
+							"referenceName": "[parameters('SunsuriaDM')]",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "Load Units",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "RestSource",
+								"httpRequestTimeout": "00:01:40",
+								"requestInterval": "00.00:00:00.010",
+								"requestMethod": "GET",
+								"paginationRules": {
+									"supportRFC5988": "true"
+								}
+							},
+							"sink": {
+								"type": "AzureSqlSink",
+								"preCopyScript": "DELETE Stg_MyTaman_Units",
+								"writeBehavior": "insert",
+								"sqlWriterUseTableLock": false,
+								"disableMetricsCollection": false
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"path": "[['id']"
+										},
+										"sink": {
+											"name": "id",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"path": "[['unit_number']"
+										},
+										"sink": {
+											"name": "unit_number",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "[['unit_address']"
+										},
+										"sink": {
+											"name": "unit_address",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "[['unit_block']"
+										},
+										"sink": {
+											"name": "unit_block",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "[['unit_level']"
+										},
+										"sink": {
+											"name": "unit_level",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "[['owner_name']"
+										},
+										"sink": {
+											"name": "owner_name",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "[['owner_address']"
+										},
+										"sink": {
+											"name": "owner_address",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "[['owner_contact']"
+										},
+										"sink": {
+											"name": "owner_contact",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "[['owner_email']"
+										},
+										"sink": {
+											"name": "owner_email",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "[['defects_liability_start_date']"
+										},
+										"sink": {
+											"name": "defects_liability_start_date",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "[['project_id']"
+										},
+										"sink": {
+											"name": "project_id",
+											"type": "Int32"
+										}
+									}
+								],
+								"collectionReference": "$['unit_owners']"
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "API_Defects_Units",
+								"type": "DatasetReference",
+								"parameters": {
+									"auth_nopage": "auth_token=ajDAiGUgqYjz5HwHVYD61ccm&no_pagination=true"
+								}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "Stg_Units",
+								"type": "DatasetReference"
+							}
+						]
+					},
+					{
+						"name": "Copy to MyTaman_Units",
+						"type": "Script",
+						"dependsOn": [
+							{
+								"activity": "Load Units",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"linkedServiceName": {
+							"referenceName": "[parameters('SunsuriaDM')]",
+							"type": "LinkedServiceReference"
+						},
+						"typeProperties": {
+							"scripts": [
+								{
+									"type": "NonQuery",
+									"text": "BEGIN TRAN\n   DELETE MyTaman_Units;\n   INSERT MyTaman_Units SELECT * FROM [Stg_MyTaman_Units];\nCOMMIT"
+								},
+								{
+									"type": "NonQuery",
+									"text": "-- Convert Unit Level for MONET GARDEN (fix data issue from source)\nUPDATE [MyTaman_Units]\nSET unit_level = 'TERRACE'\nWHERE project_id = 92 AND unit_level = 'NA'\n"
+								}
+							]
+						}
+					},
+					{
+						"name": "GetLastUpdatedDate_Forms",
+						"type": "Script",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"linkedServiceName": {
+							"referenceName": "[parameters('SunsuriaDM')]",
+							"type": "LinkedServiceReference"
+						},
+						"typeProperties": {
+							"scripts": [
+								{
+									"parameters": [
+										{
+											"name": "LastUpdatedDate",
+											"type": "String",
+											"value": "",
+											"direction": "Output",
+											"size": "255"
+										}
+									],
+									"type": "Query",
+									"text": "SELECT MAX(updated_at) + '.' AS LastUpdatedDate FROM MyTaman_Forms\n"
+								}
+							]
+						}
+					},
+					{
+						"name": "Load Forms",
+						"type": "Copy",
+						"dependsOn": [
+							{
+								"activity": "GetLastUpdatedDate_Forms",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "RestSource",
+								"httpRequestTimeout": "00:01:40",
+								"requestInterval": "00.00:00:00.010",
+								"requestMethod": "GET",
+								"paginationRules": {
+									"supportRFC5988": "true"
+								}
+							},
+							"sink": {
+								"type": "AzureSqlSink",
+								"preCopyScript": "DELETE Stg_MyTaman_Forms",
+								"writeBehavior": "insert",
+								"sqlWriterUseTableLock": false,
+								"disableMetricsCollection": false
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"path": "[['id']"
+										},
+										"sink": {
+											"name": "id",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"path": "[['status']"
+										},
+										"sink": {
+											"name": "status",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "[['sign_off_date']"
+										},
+										"sink": {
+											"name": "sign_off_date",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "[['complete_date']"
+										},
+										"sink": {
+											"name": "complete_date",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "[['closed_date']"
+										},
+										"sink": {
+											"name": "closed_date",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "[['stage']"
+										},
+										"sink": {
+											"name": "stage",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "[['project_id']"
+										},
+										"sink": {
+											"name": "project_id",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "[['unit_owner_id']"
+										},
+										"sink": {
+											"name": "unit_owner_id",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"path": "[['created_at']"
+										},
+										"sink": {
+											"name": "created_at",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "[['updated_at']"
+										},
+										"sink": {
+											"name": "updated_at",
+											"type": "String"
+										}
+									}
+								],
+								"collectionReference": "$['vacant_possessions']"
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "API_Defects_Forms",
+								"type": "DatasetReference",
+								"parameters": {
+									"last_updated": {
+										"value": "@activity('GetLastUpdatedDate_Forms').output",
+										"type": "Expression"
+									},
+									"auth_nopage": "auth_token=ajDAiGUgqYjz5HwHVYD61ccm&no_pagination=true"
+								}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "Stg_Forms",
+								"type": "DatasetReference"
+							}
+						]
+					},
+					{
+						"name": "Exec Insert Forms",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [
+							{
+								"activity": "Load Forms",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[dbo].[Insert_MyTaman_Forms]"
+						},
+						"linkedServiceName": {
+							"referenceName": "[parameters('SunsuriaDM')]",
+							"type": "LinkedServiceReference"
+						}
+					}
+				],
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/API_Defects_ProjectsList')]",
+				"[concat(variables('factoryId'), '/datasets/Stg_Projects')]",
+				"[concat(variables('factoryId'), '/datasets/API_Defects_List')]",
+				"[concat(variables('factoryId'), '/datasets/Stg_Defects')]",
+				"[concat(variables('factoryId'), '/datasets/API_Defects_Units')]",
+				"[concat(variables('factoryId'), '/datasets/Stg_Units')]",
+				"[concat(variables('factoryId'), '/datasets/API_Defects_Forms')]",
+				"[concat(variables('factoryId'), '/datasets/Stg_Forms')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/API_Defects_ProjectsList')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "[parameters('REST_Defects')]",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "RestResource",
+				"typeProperties": {
+					"relativeUrl": "projects_list?auth_token=ajDAiGUgqYjz5HwHVYD61ccm"
+				},
+				"schema": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Stg_Projects')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "[parameters('SunsuriaDM')]",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "id",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "name",
+						"type": "nvarchar"
+					},
+					{
+						"name": "address",
+						"type": "nvarchar"
+					},
+					{
+						"name": "stage",
+						"type": "nvarchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "Stg_MyTaman_Projects"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/API_Defects_List')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "[parameters('REST_Defects')]",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"last_updated": {
+						"type": "string",
+						"defaultValue": "2022-09-01"
+					},
+					"auth_nopage": {
+						"type": "string",
+						"defaultValue": "auth_token=ajDAiGUgqYjz5HwHVYD61ccm&no_pagination=true"
+					}
+				},
+				"annotations": [],
+				"type": "RestResource",
+				"typeProperties": {
+					"relativeUrl": {
+						"value": "@concat('work_orders_list?',dataset().auth_nopage,'&q[updated_at_gteq]=', dataset().last_updated)",
+						"type": "Expression"
+					}
+				},
+				"schema": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Stg_Defects')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "[parameters('SunsuriaDM')]",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "id",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "title",
+						"type": "nvarchar"
+					},
+					{
+						"name": "description",
+						"type": "nvarchar"
+					},
+					{
+						"name": "status",
+						"type": "nvarchar"
+					},
+					{
+						"name": "workflow_description",
+						"type": "nvarchar"
+					},
+					{
+						"name": "vacant_possession_id",
+						"type": "nvarchar"
+					},
+					{
+						"name": "project_id",
+						"type": "nvarchar"
+					},
+					{
+						"name": "category_one",
+						"type": "nvarchar"
+					},
+					{
+						"name": "category_two",
+						"type": "nvarchar"
+					},
+					{
+						"name": "category_three",
+						"type": "nvarchar"
+					},
+					{
+						"name": "category_four",
+						"type": "nvarchar"
+					},
+					{
+						"name": "created_at",
+						"type": "nvarchar"
+					},
+					{
+						"name": "updated_at",
+						"type": "nvarchar"
+					},
+					{
+						"name": "calculated_id",
+						"type": "nvarchar"
+					},
+					{
+						"name": "created_by",
+						"type": "nvarchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "Stg_MyTaman_Defects"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/API_Defects_Units')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "[parameters('REST_Defects')]",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"auth_nopage": {
+						"type": "string",
+						"defaultValue": "auth_token=ajDAiGUgqYjz5HwHVYD61ccm&no_pagination=true"
+					}
+				},
+				"annotations": [],
+				"type": "RestResource",
+				"typeProperties": {
+					"relativeUrl": {
+						"value": "@concat('unit_owners_list?',dataset().auth_nopage)",
+						"type": "Expression"
+					}
+				},
+				"schema": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Stg_Units')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "[parameters('SunsuriaDM')]",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "id",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "unit_number",
+						"type": "nvarchar"
+					},
+					{
+						"name": "unit_address",
+						"type": "nvarchar"
+					},
+					{
+						"name": "unit_block",
+						"type": "nvarchar"
+					},
+					{
+						"name": "unit_level",
+						"type": "nvarchar"
+					},
+					{
+						"name": "owner_name",
+						"type": "nvarchar"
+					},
+					{
+						"name": "owner_address",
+						"type": "nvarchar"
+					},
+					{
+						"name": "owner_contact",
+						"type": "nvarchar"
+					},
+					{
+						"name": "owner_email",
+						"type": "nvarchar"
+					},
+					{
+						"name": "defects_liability_start_date",
+						"type": "nvarchar"
+					},
+					{
+						"name": "project_id",
+						"type": "int",
+						"precision": 10
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "Stg_MyTaman_Units"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/API_Defects_Forms')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "[parameters('REST_Defects')]",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"last_updated": {
+						"type": "string",
+						"defaultValue": "2022-09-01"
+					},
+					"auth_nopage": {
+						"type": "string",
+						"defaultValue": "auth_token=ajDAiGUgqYjz5HwHVYD61ccm&no_pagination=true"
+					}
+				},
+				"annotations": [],
+				"type": "RestResource",
+				"typeProperties": {
+					"relativeUrl": {
+						"value": "@concat('vacant_possessions_list?',dataset().auth_nopage,'&q[updated_at_gteq]=', dataset().last_updated)",
+						"type": "Expression"
+					}
+				},
+				"schema": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Stg_Forms')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "[parameters('SunsuriaDM')]",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "id",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "unit_owner_id",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "status",
+						"type": "nvarchar"
+					},
+					{
+						"name": "sign_off_date",
+						"type": "nvarchar"
+					},
+					{
+						"name": "complete_date",
+						"type": "nvarchar"
+					},
+					{
+						"name": "closed_date",
+						"type": "nvarchar"
+					},
+					{
+						"name": "stage",
+						"type": "nvarchar"
+					},
+					{
+						"name": "project_id",
+						"type": "nvarchar"
+					},
+					{
+						"name": "created_at",
+						"type": "nvarchar"
+					},
+					{
+						"name": "updated_at",
+						"type": "nvarchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "Stg_MyTaman_Forms"
+				}
+			},
+			"dependsOn": []
+		}
+	]
+}
