@@ -1,0 +1,40 @@
+{
+	"name": "Stg_RFWI_Phases",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "SunsuriaDM",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "id",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "company_id",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "project_id",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "phase_code",
+				"type": "nvarchar"
+			},
+			{
+				"name": "phase_name",
+				"type": "nvarchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "Stg_MyTaman_RFWI_Phases"
+		}
+	}
+}
