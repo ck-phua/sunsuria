@@ -22,7 +22,7 @@
 					"scripts": [
 						{
 							"type": "Query",
-							"text": "SELECT id FROM [MyTaman_RFWI_Phases]\n--WHERE id NOT IN (11)\n"
+							"text": "SELECT id FROM [MyTaman_RFWI_Phases] WHERE id NOT IN (11)\n"
 						},
 						{
 							"type": "NonQuery",
