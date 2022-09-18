@@ -22,7 +22,7 @@
 					"scripts": [
 						{
 							"type": "Query",
-							"text": "SELECT id FROM [MyTaman_RFWI_Phases]\n\n"
+							"text": "SELECT id FROM [MyTaman_RFWI_Phases]\nWHERE id NOT IN (11)\n"
 						},
 						{
 							"type": "NonQuery",
@@ -219,7 +219,7 @@
 					{
 						"activity": "ForEach_PhaseID",
 						"dependencyConditions": [
-							"Succeeded"
+							"Completed"
 						]
 					}
 				],
