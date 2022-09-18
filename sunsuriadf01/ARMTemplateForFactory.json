@@ -15,6 +15,10 @@
 			"type": "string",
 			"defaultValue": "https://engine.pegasuswork.com/powerbi_api"
 		},
+		"REST_RFWI_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://sunsuria.pegasuswork.com/api/powerbi/rfwi"
+		},
 		"REST_VP_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://vp.pegasuswork.com/api/v4/en/powerbi-api"
@@ -861,11 +865,11 @@
 							"scripts": [
 								{
 									"type": "Query",
-									"text": "SELECT id FROM MyTaman_VP_Companies\n"
+									"text": "SELECT id FROM MyTaman_RFWI_Companies"
 								},
 								{
 									"type": "NonQuery",
-									"text": "DELETE Stg_MyTaman_VP_Units"
+									"text": "DELETE Stg_MyTaman_RFWI_Projects"
 								}
 							]
 						}
@@ -889,7 +893,7 @@
 							},
 							"activities": [
 								{
-									"name": "Copy data2",
+									"name": "Copy RFWI_Projects",
 									"type": "Copy",
 									"dependsOn": [],
 									"policy": {
@@ -930,226 +934,10 @@
 												},
 												{
 													"source": {
-														"path": "[['customer_id']"
+														"path": "[['project_code']"
 													},
 													"sink": {
-														"name": "customer_id",
-														"type": "String"
-													}
-												},
-												{
-													"source": {
-														"path": "[['company_id']"
-													},
-													"sink": {
-														"name": "company_id",
-														"type": "String"
-													}
-												},
-												{
-													"source": {
-														"path": "[['project_id']"
-													},
-													"sink": {
-														"name": "project_id",
-														"type": "String"
-													}
-												},
-												{
-													"source": {
-														"path": "[['phase_id']"
-													},
-													"sink": {
-														"name": "phase_id",
-														"type": "String"
-													}
-												},
-												{
-													"source": {
-														"path": "[['vp_status']"
-													},
-													"sink": {
-														"name": "vp_status",
-														"type": "String"
-													}
-												},
-												{
-													"source": {
-														"path": "[['loan_drawdown']"
-													},
-													"sink": {
-														"name": "loan_drawdown",
-														"type": "String"
-													}
-												},
-												{
-													"source": {
-														"path": "[['payment_status']"
-													},
-													"sink": {
-														"name": "payment_status",
-														"type": "String"
-													}
-												},
-												{
-													"source": {
-														"path": "[['slot_id']"
-													},
-													"sink": {
-														"name": "slot_id",
-														"type": "String"
-													}
-												},
-												{
-													"source": {
-														"path": "[['appointment_date_time']"
-													},
-													"sink": {
-														"name": "appointment_date_time",
-														"type": "String"
-													}
-												},
-												{
-													"source": {
-														"path": "[['vp_inventory_checklist_done']"
-													},
-													"sink": {
-														"name": "vp_inventory_checklist_done",
-														"type": "String"
-													}
-												},
-												{
-													"source": {
-														"path": "[['vp_survey_done']"
-													},
-													"sink": {
-														"name": "vp_survey_done",
-														"type": "String"
-													}
-												},
-												{
-													"source": {
-														"path": "[['key_collected']"
-													},
-													"sink": {
-														"name": "key_collected",
-														"type": "String"
-													}
-												},
-												{
-													"source": {
-														"path": "[['vp_date']"
-													},
-													"sink": {
-														"name": "vp_date",
-														"type": "String"
-													}
-												},
-												{
-													"source": {
-														"path": "[['unit_code']"
-													},
-													"sink": {
-														"name": "unit_code",
-														"type": "String"
-													}
-												},
-												{
-													"source": {
-														"path": "[['unit_name']"
-													},
-													"sink": {
-														"name": "unit_name",
-														"type": "String"
-													}
-												},
-												{
-													"source": {
-														"path": "[['lot_address']"
-													},
-													"sink": {
-														"name": "lot_address",
-														"type": "String"
-													}
-												},
-												{
-													"source": {
-														"path": "[['buyer']"
-													},
-													"sink": {
-														"name": "buyer",
-														"type": "String"
-													}
-												},
-												{
-													"source": {
-														"path": "[['authorized_name']"
-													},
-													"sink": {
-														"name": "authorized_name",
-														"type": "String"
-													}
-												},
-												{
-													"source": {
-														"path": "[['authorized_contact']"
-													},
-													"sink": {
-														"name": "authorized_contact",
-														"type": "String"
-													}
-												},
-												{
-													"source": {
-														"path": "[['authorized_email']"
-													},
-													"sink": {
-														"name": "authorized_email",
-														"type": "String"
-													}
-												},
-												{
-													"source": {
-														"path": "[['authorized_nric']"
-													},
-													"sink": {
-														"name": "authorized_nric",
-														"type": "String"
-													}
-												},
-												{
-													"source": {
-														"path": "[['mobile_phone']"
-													},
-													"sink": {
-														"name": "mobile_phone",
-														"type": "String"
-													}
-												},
-												{
-													"source": {
-														"path": "[['email']"
-													},
-													"sink": {
-														"name": "email",
-														"type": "String"
-													}
-												},
-												{
-													"source": {
-														"path": "[['address']"
-													},
-													"sink": {
-														"name": "address",
-														"type": "String"
-													}
-												},
-												{
-													"source": {
-														"path": "[['company_name']"
-													},
-													"sink": {
-														"name": "company_name",
+														"name": "project_code",
 														"type": "String"
 													}
 												},
@@ -1164,33 +952,30 @@
 												},
 												{
 													"source": {
-														"path": "[['phase_name']"
+														"path": "[['company_id']"
 													},
 													"sink": {
-														"name": "phase_name",
-														"type": "String"
+														"name": "company_id",
+														"type": "Int32"
 													}
 												}
 											],
-											"collectionReference": "$['units']"
+											"collectionReference": "$['projects']"
 										}
 									},
 									"inputs": [
 										{
-											"referenceName": "API_VP_Units",
+											"referenceName": "API_RFWI_Projects",
 											"type": "DatasetReference",
 											"parameters": {
 												"hash": "hash=CX3QfnaR9CjYStUabZtkL5NYeP8w3zM9W77N3zZFQGgghPj2WkbWemGEWntGhkW4xLvD4RnNuAfnTZMyN3B5Rn5gP3dJgMBdmjcYcXvbJkT5mREgVKCzkRkH5HzfUp3p",
-												"companyid": {
-													"value": "@concat('&company_id=', item().id)",
-													"type": "Expression"
-												}
+												"companyid": "@concat('&company_id=', item().id)"
 											}
 										}
 									],
 									"outputs": [
 										{
-											"referenceName": "Stg_VP_Units",
+											"referenceName": "Stg_RFWI_Companies",
 											"type": "DatasetReference",
 											"parameters": {}
 										}
@@ -1200,7 +985,7 @@
 						}
 					},
 					{
-						"name": "Copy to VP_Units",
+						"name": "Copy to RFWI_Projects",
 						"type": "Script",
 						"dependsOn": [
 							{
@@ -1226,7 +1011,7 @@
 							"scripts": [
 								{
 									"type": "NonQuery",
-									"text": "BEGIN TRAN\n   DELETE [MyTaman_VP_Units];\n   INSERT [MyTaman_VP_Units]\n   SELECT * FROM [Stg_MyTaman_VP_Units] WHERE id IS NOT NULL;\nCOMMIT\n\n"
+									"text": "BEGIN TRAN\n   DELETE [MyTaman_RFWI_Projects];\n   INSERT [MyTaman_RFWI_Projects]\n   SELECT * FROM [Stg_MyTaman_RFWI_Projects];\nCOMMIT\n\n"
 								}
 							]
 						}
@@ -1245,8 +1030,8 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/SunsuriaDM')]",
-				"[concat(variables('factoryId'), '/datasets/API_VP_Units')]",
-				"[concat(variables('factoryId'), '/datasets/Stg_VP_Units')]"
+				"[concat(variables('factoryId'), '/datasets/API_RFWI_Projects')]",
+				"[concat(variables('factoryId'), '/datasets/Stg_RFWI_Companies')]"
 			]
 		},
 		{
@@ -1303,7 +1088,7 @@
 							},
 							"activities": [
 								{
-									"name": "Copy data2",
+									"name": "Copy VP_Units",
 									"type": "Copy",
 									"dependsOn": [],
 									"policy": {
@@ -1830,6 +1615,39 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/API_RFWI_Projects')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "REST_RFWI",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"hash": {
+						"type": "string",
+						"defaultValue": "hash=CX3QfnaR9CjYStUabZtkL5NYeP8w3zM9W77N3zZFQGgghPj2WkbWemGEWntGhkW4xLvD4RnNuAfnTZMyN3B5Rn5gP3dJgMBdmjcYcXvbJkT5mREgVKCzkRkH5HzfUp3p"
+					},
+					"companyid": {
+						"type": "string",
+						"defaultValue": "&company_id=1"
+					}
+				},
+				"annotations": [],
+				"type": "RestResource",
+				"typeProperties": {
+					"relativeUrl": {
+						"value": "@concat('projects?',dataset().hash,dataset().companyid)",
+						"type": "Expression"
+					}
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/REST_RFWI')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/API_VP_Units')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -2049,6 +1867,46 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/Stg_RFWI_Companies')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "SunsuriaDM",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "id",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "company_id",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "project_code",
+						"type": "nvarchar"
+					},
+					{
+						"name": "project_name",
+						"type": "nvarchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "Stg_MyTaman_RFWI_Projects"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/SunsuriaDM')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/Stg_Units')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -2260,6 +2118,21 @@
 				"type": "RestService",
 				"typeProperties": {
 					"url": "[parameters('REST_Defects_properties_typeProperties_url')]",
+					"enableServerCertificateValidation": true,
+					"authenticationType": "Anonymous"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/REST_RFWI')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "RestService",
+				"typeProperties": {
+					"url": "[parameters('REST_RFWI_properties_typeProperties_url')]",
 					"enableServerCertificateValidation": true,
 					"authenticationType": "Anonymous"
 				}
