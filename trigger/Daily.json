@@ -2,7 +2,7 @@
 	"name": "Daily",
 	"properties": {
 		"annotations": [],
-		"runtimeState": "Stopped",
+		"runtimeState": "Started",
 		"pipelines": [
 			{
 				"pipelineReference": {
@@ -35,7 +35,7 @@
 						30
 					],
 					"hours": [
-						20
+						14
 					]
 				}
 			}
