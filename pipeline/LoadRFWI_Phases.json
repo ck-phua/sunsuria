@@ -150,7 +150,7 @@
 				}
 			},
 			{
-				"name": "Copy to RFWI_Projects_Phases",
+				"name": "Copy to RFWI_Phases",
 				"type": "Script",
 				"dependsOn": [
 					{
