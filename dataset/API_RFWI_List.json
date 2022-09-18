@@ -10,9 +10,9 @@
 				"type": "string",
 				"defaultValue": "hash=CX3QfnaR9CjYStUabZtkL5NYeP8w3zM9W77N3zZFQGgghPj2WkbWemGEWntGhkW4xLvD4RnNuAfnTZMyN3B5Rn5gP3dJgMBdmjcYcXvbJkT5mREgVKCzkRkH5HzfUp3p"
 			},
-			"projectid": {
+			"phaseid": {
 				"type": "string",
-				"defaultValue": "&project_id=1"
+				"defaultValue": "&phase_id=1"
 			}
 		},
 		"annotations": [],
