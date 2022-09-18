@@ -3,13 +3,53 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Execute Pipeline1",
+				"name": "Exec LoadRFWI_Projects",
 				"type": "ExecutePipeline",
 				"dependsOn": [],
 				"userProperties": [],
 				"typeProperties": {
 					"pipeline": {
 						"referenceName": "LoadRFWI_Projects",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "Exec LoadRFWI_Phases",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Exec LoadRFWI_Projects",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "LoadRFWI_Phases",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "Exec LoadRFWI_List",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Exec LoadRFWI_Phases",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "LoadRFWI_List",
 						"type": "PipelineReference"
 					},
 					"waitOnCompletion": true
