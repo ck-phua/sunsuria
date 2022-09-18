@@ -13,6 +13,1872 @@
 	},
 	"resources": [
 		{
+			"name": "[concat(parameters('factoryName'), '/LoadDefects')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Load Projects",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "RestSource",
+								"httpRequestTimeout": "00:01:40",
+								"requestInterval": "00.00:00:00.010",
+								"requestMethod": "GET",
+								"paginationRules": {
+									"supportRFC5988": "true"
+								}
+							},
+							"sink": {
+								"type": "AzureSqlSink",
+								"preCopyScript": "DELETE Stg_MyTaman_Projects",
+								"writeBehavior": "insert",
+								"sqlWriterUseTableLock": false,
+								"disableMetricsCollection": false
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"path": "[['id']"
+										},
+										"sink": {
+											"name": "id",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"path": "[['name']"
+										},
+										"sink": {
+											"name": "name",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "[['stage']"
+										},
+										"sink": {
+											"name": "stage",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "[['address']"
+										},
+										"sink": {
+											"name": "address",
+											"type": "String"
+										}
+									}
+								],
+								"collectionReference": "$['projects']"
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "API_Defects_ProjectsList",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "Stg_Projects",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					},
+					{
+						"name": "Copy to MyTaman_Projects",
+						"type": "Script",
+						"dependsOn": [
+							{
+								"activity": "Load Projects",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"linkedServiceName": {
+							"referenceName": "SunsuriaDM",
+							"type": "LinkedServiceReference"
+						},
+						"typeProperties": {
+							"scripts": [
+								{
+									"type": "NonQuery",
+									"text": "BEGIN TRAN\n   DELETE MyTaman_Projects;\n   INSERT MyTaman_Projects SELECT * FROM Stg_MyTaman_Projects;\nCOMMIT\n"
+								}
+							]
+						}
+					},
+					{
+						"name": "GetLastUpdatedDate",
+						"type": "Script",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"linkedServiceName": {
+							"referenceName": "SunsuriaDM",
+							"type": "LinkedServiceReference"
+						},
+						"typeProperties": {
+							"scripts": [
+								{
+									"parameters": [
+										{
+											"name": "LastUpdatedDate",
+											"type": "String",
+											"value": "",
+											"direction": "Output",
+											"size": "255"
+										}
+									],
+									"type": "Query",
+									"text": "SELECT MAX(updated_at) + '.' AS LastUpdatedDate FROM MyTaman_Defects\n"
+								}
+							]
+						}
+					},
+					{
+						"name": "Load Defect_List",
+						"type": "Copy",
+						"dependsOn": [
+							{
+								"activity": "GetLastUpdatedDate",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "RestSource",
+								"httpRequestTimeout": "00:01:40",
+								"requestInterval": "00.00:00:00.010",
+								"requestMethod": "GET",
+								"paginationRules": {
+									"supportRFC5988": "true"
+								}
+							},
+							"sink": {
+								"type": "AzureSqlSink",
+								"preCopyScript": "DELETE Stg_MyTaman_Defects",
+								"writeBehavior": "insert",
+								"sqlWriterUseTableLock": false,
+								"disableMetricsCollection": false
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"path": "[['id']"
+										},
+										"sink": {
+											"name": "id",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"path": "[['title']"
+										},
+										"sink": {
+											"name": "title",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "[['description']"
+										},
+										"sink": {
+											"name": "description",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "[['status']"
+										},
+										"sink": {
+											"name": "status",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "[['category_one']['name']"
+										},
+										"sink": {
+											"name": "category_one",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "[['category_two']['name']"
+										},
+										"sink": {
+											"name": "category_two",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "[['category_three']['name']"
+										},
+										"sink": {
+											"name": "category_three",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "[['category_four']['name']"
+										},
+										"sink": {
+											"name": "category_four",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "[['workflow_description']"
+										},
+										"sink": {
+											"name": "workflow_description",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "[['vacant_possession_id']"
+										},
+										"sink": {
+											"name": "vacant_possession_id",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "[['project_id']"
+										},
+										"sink": {
+											"name": "project_id",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "[['created_at']"
+										},
+										"sink": {
+											"name": "created_at",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "[['updated_at']"
+										},
+										"sink": {
+											"name": "updated_at",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "[['calculated_id']"
+										},
+										"sink": {
+											"name": "calculated_id",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "[['created_by']"
+										},
+										"sink": {
+											"name": "created_by",
+											"type": "String"
+										}
+									}
+								],
+								"collectionReference": "$['work_orders']"
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "API_Defects_List",
+								"type": "DatasetReference",
+								"parameters": {
+									"last_updated": {
+										"value": "@activity('GetLastUpdatedDate').output",
+										"type": "Expression"
+									},
+									"auth_nopage": "auth_token=ajDAiGUgqYjz5HwHVYD61ccm&no_pagination=true"
+								}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "Stg_Defects",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					},
+					{
+						"name": "Exec Insert Defects",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [
+							{
+								"activity": "Load Defect_List",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[dbo].[Insert_MyTaman_Defects]"
+						},
+						"linkedServiceName": {
+							"referenceName": "SunsuriaDM",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "Load Units",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "RestSource",
+								"httpRequestTimeout": "00:01:40",
+								"requestInterval": "00.00:00:00.010",
+								"requestMethod": "GET",
+								"paginationRules": {
+									"supportRFC5988": "true"
+								}
+							},
+							"sink": {
+								"type": "AzureSqlSink",
+								"preCopyScript": "DELETE Stg_MyTaman_Units",
+								"writeBehavior": "insert",
+								"sqlWriterUseTableLock": false,
+								"disableMetricsCollection": false
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"path": "[['id']"
+										},
+										"sink": {
+											"name": "id",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"path": "[['unit_number']"
+										},
+										"sink": {
+											"name": "unit_number",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "[['unit_address']"
+										},
+										"sink": {
+											"name": "unit_address",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "[['unit_block']"
+										},
+										"sink": {
+											"name": "unit_block",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "[['unit_level']"
+										},
+										"sink": {
+											"name": "unit_level",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "[['owner_name']"
+										},
+										"sink": {
+											"name": "owner_name",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "[['owner_address']"
+										},
+										"sink": {
+											"name": "owner_address",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "[['owner_contact']"
+										},
+										"sink": {
+											"name": "owner_contact",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "[['owner_email']"
+										},
+										"sink": {
+											"name": "owner_email",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "[['defects_liability_start_date']"
+										},
+										"sink": {
+											"name": "defects_liability_start_date",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "[['project_id']"
+										},
+										"sink": {
+											"name": "project_id",
+											"type": "Int32"
+										}
+									}
+								],
+								"collectionReference": "$['unit_owners']"
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "API_Defects_Units",
+								"type": "DatasetReference",
+								"parameters": {
+									"auth_nopage": "auth_token=ajDAiGUgqYjz5HwHVYD61ccm&no_pagination=true"
+								}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "Stg_Units",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					},
+					{
+						"name": "Copy to MyTaman_Units",
+						"type": "Script",
+						"dependsOn": [
+							{
+								"activity": "Load Units",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"linkedServiceName": {
+							"referenceName": "SunsuriaDM",
+							"type": "LinkedServiceReference"
+						},
+						"typeProperties": {
+							"scripts": [
+								{
+									"type": "NonQuery",
+									"text": "BEGIN TRAN\n   DELETE MyTaman_Units;\n   INSERT MyTaman_Units SELECT * FROM [Stg_MyTaman_Units];\nCOMMIT"
+								},
+								{
+									"type": "NonQuery",
+									"text": "-- Convert Unit Level for MONET GARDEN (fix data issue from source)\nUPDATE [MyTaman_Units]\nSET unit_level = 'TERRACE'\nWHERE project_id = 92 AND unit_level = 'NA'\n"
+								}
+							]
+						}
+					},
+					{
+						"name": "GetLastUpdatedDate_Forms",
+						"type": "Script",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"linkedServiceName": {
+							"referenceName": "SunsuriaDM",
+							"type": "LinkedServiceReference"
+						},
+						"typeProperties": {
+							"scripts": [
+								{
+									"parameters": [
+										{
+											"name": "LastUpdatedDate",
+											"type": "String",
+											"value": "",
+											"direction": "Output",
+											"size": "255"
+										}
+									],
+									"type": "Query",
+									"text": "SELECT MAX(updated_at) + '.' AS LastUpdatedDate FROM MyTaman_Forms\n"
+								}
+							]
+						}
+					},
+					{
+						"name": "Load Forms",
+						"type": "Copy",
+						"dependsOn": [
+							{
+								"activity": "GetLastUpdatedDate_Forms",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "RestSource",
+								"httpRequestTimeout": "00:01:40",
+								"requestInterval": "00.00:00:00.010",
+								"requestMethod": "GET",
+								"paginationRules": {
+									"supportRFC5988": "true"
+								}
+							},
+							"sink": {
+								"type": "AzureSqlSink",
+								"preCopyScript": "DELETE Stg_MyTaman_Forms",
+								"writeBehavior": "insert",
+								"sqlWriterUseTableLock": false,
+								"disableMetricsCollection": false
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"path": "[['id']"
+										},
+										"sink": {
+											"name": "id",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"path": "[['status']"
+										},
+										"sink": {
+											"name": "status",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "[['sign_off_date']"
+										},
+										"sink": {
+											"name": "sign_off_date",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "[['complete_date']"
+										},
+										"sink": {
+											"name": "complete_date",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "[['closed_date']"
+										},
+										"sink": {
+											"name": "closed_date",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "[['stage']"
+										},
+										"sink": {
+											"name": "stage",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "[['project_id']"
+										},
+										"sink": {
+											"name": "project_id",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "[['unit_owner_id']"
+										},
+										"sink": {
+											"name": "unit_owner_id",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"path": "[['created_at']"
+										},
+										"sink": {
+											"name": "created_at",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "[['updated_at']"
+										},
+										"sink": {
+											"name": "updated_at",
+											"type": "String"
+										}
+									}
+								],
+								"collectionReference": "$['vacant_possessions']"
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "API_Defects_Forms",
+								"type": "DatasetReference",
+								"parameters": {
+									"last_updated": {
+										"value": "@activity('GetLastUpdatedDate_Forms').output",
+										"type": "Expression"
+									},
+									"auth_nopage": "auth_token=ajDAiGUgqYjz5HwHVYD61ccm&no_pagination=true"
+								}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "Stg_Forms",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					},
+					{
+						"name": "Exec Insert Forms",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [
+							{
+								"activity": "Load Forms",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[dbo].[Insert_MyTaman_Forms]"
+						},
+						"linkedServiceName": {
+							"referenceName": "SunsuriaDM",
+							"type": "LinkedServiceReference"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/LoadRFWI_Projects')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "GetCompanyIDs",
+						"type": "Script",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"linkedServiceName": {
+							"referenceName": "SunsuriaDM",
+							"type": "LinkedServiceReference"
+						},
+						"typeProperties": {
+							"scripts": [
+								{
+									"type": "Query",
+									"text": "SELECT id FROM MyTaman_RFWI_Companies"
+								},
+								{
+									"type": "NonQuery",
+									"text": "DELETE Stg_MyTaman_RFWI_Projects"
+								}
+							]
+						}
+					},
+					{
+						"name": "ForEach_CompanyID",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "GetCompanyIDs",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('GetCompanyIDs').output.resultSets[0].Rows",
+								"type": "Expression"
+							},
+							"activities": [
+								{
+									"name": "Copy RFWI_Projects",
+									"type": "Copy",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "0.12:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"source": {
+											"type": "RestSource",
+											"httpRequestTimeout": "00:01:40",
+											"requestInterval": "00.00:00:00.010",
+											"requestMethod": "POST",
+											"paginationRules": {
+												"supportRFC5988": "true"
+											}
+										},
+										"sink": {
+											"type": "AzureSqlSink",
+											"writeBehavior": "insert",
+											"sqlWriterUseTableLock": false
+										},
+										"enableStaging": false,
+										"translator": {
+											"type": "TabularTranslator",
+											"mappings": [
+												{
+													"source": {
+														"path": "[['id']"
+													},
+													"sink": {
+														"name": "id",
+														"type": "Int32"
+													}
+												},
+												{
+													"source": {
+														"path": "[['project_code']"
+													},
+													"sink": {
+														"name": "project_code",
+														"type": "String"
+													}
+												},
+												{
+													"source": {
+														"path": "[['project_name']"
+													},
+													"sink": {
+														"name": "project_name",
+														"type": "String"
+													}
+												},
+												{
+													"source": {
+														"path": "[['company_id']"
+													},
+													"sink": {
+														"name": "company_id",
+														"type": "Int32"
+													}
+												}
+											],
+											"collectionReference": "$['projects']"
+										}
+									},
+									"inputs": [
+										{
+											"referenceName": "API_RFWI_Projects",
+											"type": "DatasetReference",
+											"parameters": {
+												"hash": "hash=CX3QfnaR9CjYStUabZtkL5NYeP8w3zM9W77N3zZFQGgghPj2WkbWemGEWntGhkW4xLvD4RnNuAfnTZMyN3B5Rn5gP3dJgMBdmjcYcXvbJkT5mREgVKCzkRkH5HzfUp3p",
+												"companyid": "@concat('&company_id=', item().id)"
+											}
+										}
+									],
+									"outputs": [
+										{
+											"referenceName": "Stg_RFWI_Companies",
+											"type": "DatasetReference",
+											"parameters": {}
+										}
+									]
+								}
+							]
+						}
+					},
+					{
+						"name": "Copy to RFWI_Projects",
+						"type": "Script",
+						"dependsOn": [
+							{
+								"activity": "ForEach_CompanyID",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"linkedServiceName": {
+							"referenceName": "SunsuriaDM",
+							"type": "LinkedServiceReference"
+						},
+						"typeProperties": {
+							"scripts": [
+								{
+									"type": "NonQuery",
+									"text": "BEGIN TRAN\n   DELETE [MyTaman_RFWI_Projects];\n   INSERT [MyTaman_RFWI_Projects]\n   SELECT * FROM [Stg_MyTaman_RFWI_Projects];\nCOMMIT\n\n"
+								}
+							]
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"variables": {
+					"companyid": {
+						"type": "String"
+					}
+				},
+				"annotations": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/LoadVP')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "GetCompanyIDs",
+						"type": "Script",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"linkedServiceName": {
+							"referenceName": "SunsuriaDM",
+							"type": "LinkedServiceReference"
+						},
+						"typeProperties": {
+							"scripts": [
+								{
+									"type": "Query",
+									"text": "SELECT id FROM MyTaman_VP_Companies\n"
+								},
+								{
+									"type": "NonQuery",
+									"text": "DELETE Stg_MyTaman_VP_Units"
+								}
+							]
+						}
+					},
+					{
+						"name": "ForEach1",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "GetCompanyIDs",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('GetCompanyIDs').output.resultSets[0].Rows",
+								"type": "Expression"
+							},
+							"activities": [
+								{
+									"name": "Copy VP_Units",
+									"type": "Copy",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "0.12:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"source": {
+											"type": "RestSource",
+											"httpRequestTimeout": "00:01:40",
+											"requestInterval": "00.00:00:00.010",
+											"requestMethod": "POST",
+											"paginationRules": {
+												"supportRFC5988": "true"
+											}
+										},
+										"sink": {
+											"type": "AzureSqlSink",
+											"writeBehavior": "insert",
+											"sqlWriterUseTableLock": false
+										},
+										"enableStaging": false,
+										"translator": {
+											"type": "TabularTranslator",
+											"mappings": [
+												{
+													"source": {
+														"path": "[['id']"
+													},
+													"sink": {
+														"name": "id",
+														"type": "Int32"
+													}
+												},
+												{
+													"source": {
+														"path": "[['customer_id']"
+													},
+													"sink": {
+														"name": "customer_id",
+														"type": "String"
+													}
+												},
+												{
+													"source": {
+														"path": "[['company_id']"
+													},
+													"sink": {
+														"name": "company_id",
+														"type": "String"
+													}
+												},
+												{
+													"source": {
+														"path": "[['project_id']"
+													},
+													"sink": {
+														"name": "project_id",
+														"type": "String"
+													}
+												},
+												{
+													"source": {
+														"path": "[['phase_id']"
+													},
+													"sink": {
+														"name": "phase_id",
+														"type": "String"
+													}
+												},
+												{
+													"source": {
+														"path": "[['vp_status']"
+													},
+													"sink": {
+														"name": "vp_status",
+														"type": "String"
+													}
+												},
+												{
+													"source": {
+														"path": "[['loan_drawdown']"
+													},
+													"sink": {
+														"name": "loan_drawdown",
+														"type": "String"
+													}
+												},
+												{
+													"source": {
+														"path": "[['payment_status']"
+													},
+													"sink": {
+														"name": "payment_status",
+														"type": "String"
+													}
+												},
+												{
+													"source": {
+														"path": "[['slot_id']"
+													},
+													"sink": {
+														"name": "slot_id",
+														"type": "String"
+													}
+												},
+												{
+													"source": {
+														"path": "[['appointment_date_time']"
+													},
+													"sink": {
+														"name": "appointment_date_time",
+														"type": "String"
+													}
+												},
+												{
+													"source": {
+														"path": "[['vp_inventory_checklist_done']"
+													},
+													"sink": {
+														"name": "vp_inventory_checklist_done",
+														"type": "String"
+													}
+												},
+												{
+													"source": {
+														"path": "[['vp_survey_done']"
+													},
+													"sink": {
+														"name": "vp_survey_done",
+														"type": "String"
+													}
+												},
+												{
+													"source": {
+														"path": "[['key_collected']"
+													},
+													"sink": {
+														"name": "key_collected",
+														"type": "String"
+													}
+												},
+												{
+													"source": {
+														"path": "[['vp_date']"
+													},
+													"sink": {
+														"name": "vp_date",
+														"type": "String"
+													}
+												},
+												{
+													"source": {
+														"path": "[['unit_code']"
+													},
+													"sink": {
+														"name": "unit_code",
+														"type": "String"
+													}
+												},
+												{
+													"source": {
+														"path": "[['unit_name']"
+													},
+													"sink": {
+														"name": "unit_name",
+														"type": "String"
+													}
+												},
+												{
+													"source": {
+														"path": "[['lot_address']"
+													},
+													"sink": {
+														"name": "lot_address",
+														"type": "String"
+													}
+												},
+												{
+													"source": {
+														"path": "[['buyer']"
+													},
+													"sink": {
+														"name": "buyer",
+														"type": "String"
+													}
+												},
+												{
+													"source": {
+														"path": "[['authorized_name']"
+													},
+													"sink": {
+														"name": "authorized_name",
+														"type": "String"
+													}
+												},
+												{
+													"source": {
+														"path": "[['authorized_contact']"
+													},
+													"sink": {
+														"name": "authorized_contact",
+														"type": "String"
+													}
+												},
+												{
+													"source": {
+														"path": "[['authorized_email']"
+													},
+													"sink": {
+														"name": "authorized_email",
+														"type": "String"
+													}
+												},
+												{
+													"source": {
+														"path": "[['authorized_nric']"
+													},
+													"sink": {
+														"name": "authorized_nric",
+														"type": "String"
+													}
+												},
+												{
+													"source": {
+														"path": "[['mobile_phone']"
+													},
+													"sink": {
+														"name": "mobile_phone",
+														"type": "String"
+													}
+												},
+												{
+													"source": {
+														"path": "[['email']"
+													},
+													"sink": {
+														"name": "email",
+														"type": "String"
+													}
+												},
+												{
+													"source": {
+														"path": "[['address']"
+													},
+													"sink": {
+														"name": "address",
+														"type": "String"
+													}
+												},
+												{
+													"source": {
+														"path": "[['company_name']"
+													},
+													"sink": {
+														"name": "company_name",
+														"type": "String"
+													}
+												},
+												{
+													"source": {
+														"path": "[['project_name']"
+													},
+													"sink": {
+														"name": "project_name",
+														"type": "String"
+													}
+												},
+												{
+													"source": {
+														"path": "[['phase_name']"
+													},
+													"sink": {
+														"name": "phase_name",
+														"type": "String"
+													}
+												}
+											],
+											"collectionReference": "$['units']"
+										}
+									},
+									"inputs": [
+										{
+											"referenceName": "API_VP_Units",
+											"type": "DatasetReference",
+											"parameters": {
+												"hash": "hash=CX3QfnaR9CjYStUabZtkL5NYeP8w3zM9W77N3zZFQGgghPj2WkbWemGEWntGhkW4xLvD4RnNuAfnTZMyN3B5Rn5gP3dJgMBdmjcYcXvbJkT5mREgVKCzkRkH5HzfUp3p",
+												"companyid": {
+													"value": "@concat('&company_id=', item().id)",
+													"type": "Expression"
+												}
+											}
+										}
+									],
+									"outputs": [
+										{
+											"referenceName": "Stg_VP_Units",
+											"type": "DatasetReference",
+											"parameters": {}
+										}
+									]
+								}
+							]
+						}
+					},
+					{
+						"name": "Copy to VP_Units",
+						"type": "Script",
+						"dependsOn": [
+							{
+								"activity": "ForEach1",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"linkedServiceName": {
+							"referenceName": "SunsuriaDM",
+							"type": "LinkedServiceReference"
+						},
+						"typeProperties": {
+							"scripts": [
+								{
+									"type": "NonQuery",
+									"text": "BEGIN TRAN\n   DELETE [MyTaman_VP_Units];\n   INSERT [MyTaman_VP_Units]\n   SELECT * FROM [Stg_MyTaman_VP_Units] WHERE id IS NOT NULL;\nCOMMIT\n\n"
+								}
+							]
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"variables": {
+					"companyid": {
+						"type": "String"
+					}
+				},
+				"annotations": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/LoadRFWI_Phases')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "GetProjectList",
+						"type": "Script",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"linkedServiceName": {
+							"referenceName": "SunsuriaDM",
+							"type": "LinkedServiceReference"
+						},
+						"typeProperties": {
+							"scripts": [
+								{
+									"type": "Query",
+									"text": "SELECT id FROM [MyTaman_RFWI_Projects]\n"
+								},
+								{
+									"type": "NonQuery",
+									"text": "DELETE [Stg_MyTaman_RFWI_Phases]"
+								}
+							]
+						}
+					},
+					{
+						"name": "ForEach_ProjectID",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "GetProjectList",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('GetProjectList').output.resultSets[0].Rows",
+								"type": "Expression"
+							},
+							"activities": [
+								{
+									"name": "Copy RFWI_Phases",
+									"type": "Copy",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "0.12:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"source": {
+											"type": "RestSource",
+											"httpRequestTimeout": "00:01:40",
+											"requestInterval": "00.00:00:00.010",
+											"requestMethod": "POST",
+											"paginationRules": {
+												"supportRFC5988": "true"
+											}
+										},
+										"sink": {
+											"type": "AzureSqlSink",
+											"writeBehavior": "insert",
+											"sqlWriterUseTableLock": false
+										},
+										"enableStaging": false,
+										"translator": {
+											"type": "TabularTranslator",
+											"mappings": [
+												{
+													"source": {
+														"path": "[['id']"
+													},
+													"sink": {
+														"name": "id",
+														"type": "Int32"
+													}
+												},
+												{
+													"source": {
+														"path": "[['phase_code']"
+													},
+													"sink": {
+														"name": "phase_code",
+														"type": "String"
+													}
+												},
+												{
+													"source": {
+														"path": "[['phase_name']"
+													},
+													"sink": {
+														"name": "phase_name",
+														"type": "String"
+													}
+												},
+												{
+													"source": {
+														"path": "[['project_id']"
+													},
+													"sink": {
+														"name": "project_id",
+														"type": "Int32"
+													}
+												},
+												{
+													"source": {
+														"path": "[['company_id']"
+													},
+													"sink": {
+														"name": "company_id",
+														"type": "Int32"
+													}
+												}
+											],
+											"collectionReference": "$['phases']"
+										}
+									},
+									"inputs": [
+										{
+											"referenceName": "API_RFWI_Phases",
+											"type": "DatasetReference",
+											"parameters": {
+												"hash": "hash=CX3QfnaR9CjYStUabZtkL5NYeP8w3zM9W77N3zZFQGgghPj2WkbWemGEWntGhkW4xLvD4RnNuAfnTZMyN3B5Rn5gP3dJgMBdmjcYcXvbJkT5mREgVKCzkRkH5HzfUp3p",
+												"projectid": "@concat('&project_id=', item().id)"
+											}
+										}
+									],
+									"outputs": [
+										{
+											"referenceName": "Stg_RFWI_Phases",
+											"type": "DatasetReference",
+											"parameters": {}
+										}
+									]
+								}
+							]
+						}
+					},
+					{
+						"name": "Copy to RFWI_Phases",
+						"type": "Script",
+						"dependsOn": [
+							{
+								"activity": "ForEach_ProjectID",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"linkedServiceName": {
+							"referenceName": "SunsuriaDM",
+							"type": "LinkedServiceReference"
+						},
+						"typeProperties": {
+							"scripts": [
+								{
+									"type": "NonQuery",
+									"text": "BEGIN TRAN\n   DELETE [MyTaman_RFWI_Phases];\n   INSERT [MyTaman_RFWI_Phases] SELECT * FROM [Stg_MyTaman_RFWI_Phases];\nCOMMIT\n\n"
+								}
+							]
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"variables": {
+					"companyid": {
+						"type": "String"
+					}
+				},
+				"annotations": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/LoadRFWI_List')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "GetPhaseList",
+						"type": "Script",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"linkedServiceName": {
+							"referenceName": "SunsuriaDM",
+							"type": "LinkedServiceReference"
+						},
+						"typeProperties": {
+							"scripts": [
+								{
+									"type": "Query",
+									"text": "SELECT id FROM [MyTaman_RFWI_Phases] WHERE id NOT IN (11)\n"
+								},
+								{
+									"type": "NonQuery",
+									"text": "DELETE [Stg_MyTaman_RFWI_List]"
+								}
+							]
+						}
+					},
+					{
+						"name": "ForEach_PhaseID",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "GetPhaseList",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('GetPhaseList').output.resultSets[0].Rows",
+								"type": "Expression"
+							},
+							"activities": [
+								{
+									"name": "Copy RFWI_List",
+									"type": "Copy",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "0.12:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"source": {
+											"type": "RestSource",
+											"additionalColumns": [
+												{
+													"name": "phase_id",
+													"value": {
+														"value": "@item().id",
+														"type": "Expression"
+													}
+												}
+											],
+											"httpRequestTimeout": "00:01:40",
+											"requestInterval": "00.00:00:00.010",
+											"requestMethod": "POST",
+											"paginationRules": {
+												"supportRFC5988": "true"
+											}
+										},
+										"sink": {
+											"type": "AzureSqlSink",
+											"writeBehavior": "insert",
+											"sqlWriterUseTableLock": false
+										},
+										"enableStaging": false,
+										"enableSkipIncompatibleRow": false,
+										"translator": {
+											"type": "TabularTranslator",
+											"mappings": [
+												{
+													"source": {
+														"path": "[['id']"
+													},
+													"sink": {
+														"name": "id",
+														"type": "Int32"
+													}
+												},
+												{
+													"source": {
+														"path": "[['rin_no']"
+													},
+													"sink": {
+														"name": "rin_no",
+														"type": "String"
+													}
+												},
+												{
+													"source": {
+														"path": "[['type_of_work']"
+													},
+													"sink": {
+														"name": "type_of_work",
+														"type": "String"
+													}
+												},
+												{
+													"source": {
+														"path": "[['trade_of_work']"
+													},
+													"sink": {
+														"name": "trade_of_work",
+														"type": "String"
+													}
+												},
+												{
+													"source": {
+														"path": "[['status']"
+													},
+													"sink": {
+														"name": "status",
+														"type": "String"
+													}
+												},
+												{
+													"source": {
+														"path": "[['last_update_date']"
+													},
+													"sink": {
+														"name": "last_update_date",
+														"type": "String"
+													}
+												},
+												{
+													"source": {
+														"path": "[['current_assigned_user']"
+													},
+													"sink": {
+														"name": "current_assigned_user",
+														"type": "String"
+													}
+												},
+												{
+													"source": {
+														"path": "[['current_assigned_user_role']"
+													},
+													"sink": {
+														"name": "current_assigned_user_role",
+														"type": "String"
+													}
+												},
+												{
+													"source": {
+														"path": "[['aging']"
+													},
+													"sink": {
+														"name": "aging",
+														"type": "String"
+													}
+												},
+												{
+													"source": {
+														"path": "[['submitted_date']"
+													},
+													"sink": {
+														"name": "submitted_date",
+														"type": "String"
+													}
+												},
+												{
+													"source": {
+														"path": "$['phase_id']"
+													},
+													"sink": {
+														"name": "phase_id",
+														"type": "Int32"
+													}
+												}
+											],
+											"collectionReference": "$['data']"
+										}
+									},
+									"inputs": [
+										{
+											"referenceName": "API_RFWI_List",
+											"type": "DatasetReference",
+											"parameters": {
+												"hash": "hash=CX3QfnaR9CjYStUabZtkL5NYeP8w3zM9W77N3zZFQGgghPj2WkbWemGEWntGhkW4xLvD4RnNuAfnTZMyN3B5Rn5gP3dJgMBdmjcYcXvbJkT5mREgVKCzkRkH5HzfUp3p",
+												"phaseid": "@concat('&phase_id=', item().id)"
+											}
+										}
+									],
+									"outputs": [
+										{
+											"referenceName": "Stg_RFWI_Phases_List",
+											"type": "DatasetReference",
+											"parameters": {}
+										}
+									]
+								}
+							]
+						}
+					},
+					{
+						"name": "Copy to RFWI_List",
+						"type": "Script",
+						"dependsOn": [
+							{
+								"activity": "ForEach_PhaseID",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"linkedServiceName": {
+							"referenceName": "SunsuriaDM",
+							"type": "LinkedServiceReference"
+						},
+						"typeProperties": {
+							"scripts": [
+								{
+									"type": "NonQuery",
+									"text": "BEGIN TRAN\n   DELETE [MyTaman_RFWI_List]\n   INSERT [MyTaman_RFWI_List] SELECT * FROM [Stg_MyTaman_RFWI_List]\nCOMMIT"
+								}
+							]
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"variables": {
+					"companyid": {
+						"type": "String"
+					}
+				},
+				"annotations": []
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/Daily')]",
 			"type": "Microsoft.DataFactory/factories/triggers",
 			"apiVersion": "2018-06-01",
@@ -36,7 +1902,7 @@
 					},
 					{
 						"pipelineReference": {
-							"referenceName": "LoadRFWI",
+							"referenceName": "LoadRFWI_Projects",
 							"type": "PipelineReference"
 						},
 						"parameters": {}
@@ -60,7 +1926,11 @@
 					}
 				}
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/LoadDefects')]",
+				"[concat(variables('factoryId'), '/pipelines/LoadVP')]",
+				"[concat(variables('factoryId'), '/pipelines/LoadRFWI_Projects')]"
+			]
 		}
 	]
 }
