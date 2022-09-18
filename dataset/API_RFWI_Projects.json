@@ -19,7 +19,7 @@
 		"type": "RestResource",
 		"typeProperties": {
 			"relativeUrl": {
-				"value": "@concat('vp-status-by-company?',dataset().hash,dataset().companyid)",
+				"value": "@concat('projects?',dataset().hash,dataset().companyid)",
 				"type": "Expression"
 			}
 		},

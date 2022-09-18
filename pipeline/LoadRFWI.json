@@ -91,226 +91,10 @@
 										},
 										{
 											"source": {
-												"path": "['customer_id']"
+												"path": "['project_code']"
 											},
 											"sink": {
-												"name": "customer_id",
-												"type": "String"
-											}
-										},
-										{
-											"source": {
-												"path": "['company_id']"
-											},
-											"sink": {
-												"name": "company_id",
-												"type": "String"
-											}
-										},
-										{
-											"source": {
-												"path": "['project_id']"
-											},
-											"sink": {
-												"name": "project_id",
-												"type": "String"
-											}
-										},
-										{
-											"source": {
-												"path": "['phase_id']"
-											},
-											"sink": {
-												"name": "phase_id",
-												"type": "String"
-											}
-										},
-										{
-											"source": {
-												"path": "['vp_status']"
-											},
-											"sink": {
-												"name": "vp_status",
-												"type": "String"
-											}
-										},
-										{
-											"source": {
-												"path": "['loan_drawdown']"
-											},
-											"sink": {
-												"name": "loan_drawdown",
-												"type": "String"
-											}
-										},
-										{
-											"source": {
-												"path": "['payment_status']"
-											},
-											"sink": {
-												"name": "payment_status",
-												"type": "String"
-											}
-										},
-										{
-											"source": {
-												"path": "['slot_id']"
-											},
-											"sink": {
-												"name": "slot_id",
-												"type": "String"
-											}
-										},
-										{
-											"source": {
-												"path": "['appointment_date_time']"
-											},
-											"sink": {
-												"name": "appointment_date_time",
-												"type": "String"
-											}
-										},
-										{
-											"source": {
-												"path": "['vp_inventory_checklist_done']"
-											},
-											"sink": {
-												"name": "vp_inventory_checklist_done",
-												"type": "String"
-											}
-										},
-										{
-											"source": {
-												"path": "['vp_survey_done']"
-											},
-											"sink": {
-												"name": "vp_survey_done",
-												"type": "String"
-											}
-										},
-										{
-											"source": {
-												"path": "['key_collected']"
-											},
-											"sink": {
-												"name": "key_collected",
-												"type": "String"
-											}
-										},
-										{
-											"source": {
-												"path": "['vp_date']"
-											},
-											"sink": {
-												"name": "vp_date",
-												"type": "String"
-											}
-										},
-										{
-											"source": {
-												"path": "['unit_code']"
-											},
-											"sink": {
-												"name": "unit_code",
-												"type": "String"
-											}
-										},
-										{
-											"source": {
-												"path": "['unit_name']"
-											},
-											"sink": {
-												"name": "unit_name",
-												"type": "String"
-											}
-										},
-										{
-											"source": {
-												"path": "['lot_address']"
-											},
-											"sink": {
-												"name": "lot_address",
-												"type": "String"
-											}
-										},
-										{
-											"source": {
-												"path": "['buyer']"
-											},
-											"sink": {
-												"name": "buyer",
-												"type": "String"
-											}
-										},
-										{
-											"source": {
-												"path": "['authorized_name']"
-											},
-											"sink": {
-												"name": "authorized_name",
-												"type": "String"
-											}
-										},
-										{
-											"source": {
-												"path": "['authorized_contact']"
-											},
-											"sink": {
-												"name": "authorized_contact",
-												"type": "String"
-											}
-										},
-										{
-											"source": {
-												"path": "['authorized_email']"
-											},
-											"sink": {
-												"name": "authorized_email",
-												"type": "String"
-											}
-										},
-										{
-											"source": {
-												"path": "['authorized_nric']"
-											},
-											"sink": {
-												"name": "authorized_nric",
-												"type": "String"
-											}
-										},
-										{
-											"source": {
-												"path": "['mobile_phone']"
-											},
-											"sink": {
-												"name": "mobile_phone",
-												"type": "String"
-											}
-										},
-										{
-											"source": {
-												"path": "['email']"
-											},
-											"sink": {
-												"name": "email",
-												"type": "String"
-											}
-										},
-										{
-											"source": {
-												"path": "['address']"
-											},
-											"sink": {
-												"name": "address",
-												"type": "String"
-											}
-										},
-										{
-											"source": {
-												"path": "['company_name']"
-											},
-											"sink": {
-												"name": "company_name",
+												"name": "project_code",
 												"type": "String"
 											}
 										},
@@ -325,15 +109,15 @@
 										},
 										{
 											"source": {
-												"path": "['phase_name']"
+												"path": "['company_id']"
 											},
 											"sink": {
-												"name": "phase_name",
-												"type": "String"
+												"name": "company_id",
+												"type": "Int32"
 											}
 										}
 									],
-									"collectionReference": "$['units']"
+									"collectionReference": "$['projects']"
 								}
 							},
 							"inputs": [
