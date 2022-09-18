@@ -213,7 +213,7 @@
 				}
 			},
 			{
-				"name": "Copy to RFWI_Projects_Phases",
+				"name": "Copy to RFWI_List",
 				"type": "Script",
 				"dependsOn": [
 					{
@@ -239,7 +239,7 @@
 					"scripts": [
 						{
 							"type": "NonQuery",
-							"text": "BEGIN TRAN\n   DELETE [MyTaman_RFWI_Phases];\n   INSERT [MyTaman_RFWI_Phases] SELECT * FROM [Stg_MyTaman_RFWI_Phases];\nCOMMIT\n\n"
+							"text": "BEGIN TRAN\n   DELETE [MyTaman_RFWI_List]\n   INSERT [MyTaman_RFWI_List] SELECT * FROM [Stg_MyTaman_RFWI_List]\nCOMMIT"
 						}
 					]
 				}
