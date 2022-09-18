@@ -1879,6 +1879,81 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/Load RFWI')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Exec LoadRFWI_Projects",
+						"type": "ExecutePipeline",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "LoadRFWI_Projects",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {}
+						}
+					},
+					{
+						"name": "Exec LoadRFWI_Phases",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "Exec LoadRFWI_Projects",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "LoadRFWI_Phases",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {}
+						}
+					},
+					{
+						"name": "Exec LoadRFWI_List",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "Exec LoadRFWI_Phases",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "LoadRFWI_List",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {}
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/LoadRFWI_Projects')]",
+				"[concat(variables('factoryId'), '/pipelines/LoadRFWI_Phases')]",
+				"[concat(variables('factoryId'), '/pipelines/LoadRFWI_List')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/Daily')]",
 			"type": "Microsoft.DataFactory/factories/triggers",
 			"apiVersion": "2018-06-01",
@@ -1902,7 +1977,7 @@
 					},
 					{
 						"pipelineReference": {
-							"referenceName": "LoadRFWI_Projects",
+							"referenceName": "Load RFWI",
 							"type": "PipelineReference"
 						},
 						"parameters": {}
@@ -1929,7 +2004,7 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/pipelines/LoadDefects')]",
 				"[concat(variables('factoryId'), '/pipelines/LoadVP')]",
-				"[concat(variables('factoryId'), '/pipelines/LoadRFWI_Projects')]"
+				"[concat(variables('factoryId'), '/pipelines/Load RFWI')]"
 			]
 		}
 	]
