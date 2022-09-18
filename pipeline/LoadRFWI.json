@@ -32,7 +32,7 @@
 				}
 			},
 			{
-				"name": "ForEach1",
+				"name": "ForEach_CompanyID",
 				"type": "ForEach",
 				"dependsOn": [
 					{
@@ -145,7 +145,7 @@
 				"type": "Script",
 				"dependsOn": [
 					{
-						"activity": "ForEach1",
+						"activity": "ForEach_CompanyID",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -168,6 +168,147 @@
 						{
 							"type": "NonQuery",
 							"text": "BEGIN TRAN\n   DELETE [MyTaman_RFWI_Projects];\n   INSERT [MyTaman_RFWI_Projects]\n   SELECT * FROM [Stg_MyTaman_RFWI_Projects];\nCOMMIT\n\n"
+						}
+					]
+				}
+			},
+			{
+				"name": "GetProjectList",
+				"type": "Script",
+				"dependsOn": [
+					{
+						"activity": "Copy to RFWI_Projects",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"linkedServiceName": {
+					"referenceName": "SunsuriaDM",
+					"type": "LinkedServiceReference"
+				},
+				"typeProperties": {
+					"scripts": [
+						{
+							"type": "Query",
+							"text": "SELECT id FROM [MyTaman_RFWI_Projects]\n"
+						},
+						{
+							"type": "NonQuery",
+							"text": "DELETE [Stg_MyTaman_RFWI_Phases]"
+						}
+					]
+				}
+			},
+			{
+				"name": "ForEach_ProjectID",
+				"type": "ForEach",
+				"dependsOn": [
+					{
+						"activity": "GetProjectList",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@activity('GetCompanyIDs').output.resultSets[0].Rows",
+						"type": "Expression"
+					},
+					"activities": [
+						{
+							"name": "Copy RFWI_Phases",
+							"type": "Copy",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "RestSource",
+									"httpRequestTimeout": "00:01:40",
+									"requestInterval": "00.00:00:00.010",
+									"requestMethod": "POST",
+									"paginationRules": {
+										"supportRFC5988": "true"
+									}
+								},
+								"sink": {
+									"type": "AzureSqlSink",
+									"writeBehavior": "insert",
+									"sqlWriterUseTableLock": false
+								},
+								"enableStaging": false,
+								"translator": {
+									"type": "TabularTranslator",
+									"mappings": [
+										{
+											"source": {
+												"path": "['id']"
+											},
+											"sink": {
+												"name": "id",
+												"type": "Int32"
+											}
+										},
+										{
+											"source": {
+												"path": "['project_code']"
+											},
+											"sink": {
+												"name": "project_code",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"path": "['project_name']"
+											},
+											"sink": {
+												"name": "project_name",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"path": "['company_id']"
+											},
+											"sink": {
+												"name": "company_id",
+												"type": "Int32"
+											}
+										}
+									],
+									"collectionReference": "$['projects']"
+								}
+							},
+							"inputs": [
+								{
+									"referenceName": "API_RFWI_Phases",
+									"type": "DatasetReference"
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "Stg_RFWI_Companies",
+									"type": "DatasetReference"
+								}
+							]
 						}
 					]
 				}
