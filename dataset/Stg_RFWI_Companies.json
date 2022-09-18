@@ -1,0 +1,35 @@
+{
+	"name": "Stg_RFWI_Companies",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "SunsuriaDM",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "id",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "company_id",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "project_code",
+				"type": "nvarchar"
+			},
+			{
+				"name": "project_name",
+				"type": "nvarchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "Stg_MyTaman_RFWI_Projects"
+		}
+	}
+}

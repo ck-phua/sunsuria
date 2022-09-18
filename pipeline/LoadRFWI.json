@@ -22,11 +22,11 @@
 					"scripts": [
 						{
 							"type": "Query",
-							"text": "SELECT id FROM MyTaman_VP_Companies\n"
+							"text": "SELECT id FROM MyTaman_RFWI_Companies"
 						},
 						{
 							"type": "NonQuery",
-							"text": "DELETE Stg_MyTaman_VP_Units"
+							"text": "DELETE Stg_MyTaman_RFWI_Companies"
 						}
 					]
 				}
@@ -50,7 +50,7 @@
 					},
 					"activities": [
 						{
-							"name": "Copy data2",
+							"name": "Copy RFWI_Projects",
 							"type": "Copy",
 							"dependsOn": [],
 							"policy": {
@@ -338,20 +338,17 @@
 							},
 							"inputs": [
 								{
-									"referenceName": "API_VP_Units",
+									"referenceName": "API_RFWI_Projects",
 									"type": "DatasetReference",
 									"parameters": {
 										"hash": "hash=CX3QfnaR9CjYStUabZtkL5NYeP8w3zM9W77N3zZFQGgghPj2WkbWemGEWntGhkW4xLvD4RnNuAfnTZMyN3B5Rn5gP3dJgMBdmjcYcXvbJkT5mREgVKCzkRkH5HzfUp3p",
-										"companyid": {
-											"value": "@concat('&company_id=', item().id)",
-											"type": "Expression"
-										}
+										"companyid": "@concat('&company_id=', item().id)"
 									}
 								}
 							],
 							"outputs": [
 								{
-									"referenceName": "Stg_VP_Units",
+									"referenceName": "Stg_RFWI_Companies",
 									"type": "DatasetReference"
 								}
 							]
@@ -360,7 +357,7 @@
 				}
 			},
 			{
-				"name": "Copy to VP_Units",
+				"name": "Copy to RFWI_Projects",
 				"type": "Script",
 				"dependsOn": [
 					{
@@ -386,7 +383,7 @@
 					"scripts": [
 						{
 							"type": "NonQuery",
-							"text": "BEGIN TRAN\n   DELETE [MyTaman_VP_Units];\n   INSERT [MyTaman_VP_Units]\n   SELECT * FROM [Stg_MyTaman_VP_Units] WHERE id IS NOT NULL;\nCOMMIT\n\n"
+							"text": "BEGIN TRAN\n   DELETE [MyTaman_RFWI_Projects];\n   INSERT [MyTaman_RFWI_Projects]\n   SELECT * FROM [Stg_MyTaman_RFWI_Projects];\nCOMMIT\n\n"
 						}
 					]
 				}
