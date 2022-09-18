@@ -22,7 +22,7 @@
 					"scripts": [
 						{
 							"type": "Query",
-							"text": "SELECT id FROM [MyTaman_RFWI_Phases]\nWHERE id NOT IN (11)\n"
+							"text": "SELECT id FROM [MyTaman_RFWI_Phases]\n--WHERE id NOT IN (11)\n"
 						},
 						{
 							"type": "NonQuery",
@@ -86,6 +86,7 @@
 									"sqlWriterUseTableLock": false
 								},
 								"enableStaging": false,
+								"enableSkipIncompatibleRow": true,
 								"translator": {
 									"type": "TabularTranslator",
 									"mappings": [
