@@ -91,42 +91,87 @@
 										},
 										{
 											"source": {
-												"path": "['phase_code']"
+												"path": "['rin_no']"
 											},
 											"sink": {
-												"name": "phase_code",
+												"name": "rin_no",
 												"type": "String"
 											}
 										},
 										{
 											"source": {
-												"path": "['phase_name']"
+												"path": "['type_of_work']"
 											},
 											"sink": {
-												"name": "phase_name",
+												"name": "type_of_work",
 												"type": "String"
 											}
 										},
 										{
 											"source": {
-												"path": "['project_id']"
+												"path": "['trade_of_work']"
 											},
 											"sink": {
-												"name": "project_id",
-												"type": "Int32"
+												"name": "trade_of_work",
+												"type": "String"
 											}
 										},
 										{
 											"source": {
-												"path": "['company_id']"
+												"path": "['status']"
 											},
 											"sink": {
-												"name": "company_id",
-												"type": "Int32"
+												"name": "status",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"path": "['last_update_date']"
+											},
+											"sink": {
+												"name": "last_update_date",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"path": "['current_assigned_user']"
+											},
+											"sink": {
+												"name": "current_assigned_user",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"path": "['current_assigned_user_role']"
+											},
+											"sink": {
+												"name": "current_assigned_user_role",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"path": "['aging']"
+											},
+											"sink": {
+												"name": "aging",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"path": "['submitted_date']"
+											},
+											"sink": {
+												"name": "submitted_date",
+												"type": "String"
 											}
 										}
 									],
-									"collectionReference": "$['phases']"
+									"collectionReference": "$['data']"
 								}
 							},
 							"inputs": [
@@ -141,7 +186,7 @@
 							],
 							"outputs": [
 								{
-									"referenceName": "Stg_RFWI_Phases",
+									"referenceName": "Stg_RFWI_Phases_List",
 									"type": "DatasetReference"
 								}
 							]

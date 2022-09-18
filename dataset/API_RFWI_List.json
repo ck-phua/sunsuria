@@ -19,7 +19,7 @@
 		"type": "RestResource",
 		"typeProperties": {
 			"relativeUrl": {
-				"value": "@concat('phases?',dataset().hash,dataset().phaseid)",
+				"value": "@concat('getRFWIList?',dataset().hash,dataset().phaseid)",
 				"type": "Expression"
 			}
 		},
