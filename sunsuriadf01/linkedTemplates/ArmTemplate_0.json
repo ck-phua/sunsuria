@@ -2315,6 +2315,13 @@
 							"type": "PipelineReference"
 						},
 						"parameters": {}
+					},
+					{
+						"pipelineReference": {
+							"referenceName": "LoadRFWI",
+							"type": "PipelineReference"
+						},
+						"parameters": {}
 					}
 				],
 				"type": "ScheduleTrigger",
@@ -2337,7 +2344,8 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/pipelines/LoadDefects')]",
-				"[concat(variables('factoryId'), '/pipelines/LoadVP')]"
+				"[concat(variables('factoryId'), '/pipelines/LoadVP')]",
+				"[concat(variables('factoryId'), '/pipelines/LoadRFWI')]"
 			]
 		}
 	]
