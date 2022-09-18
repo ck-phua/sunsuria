@@ -68,7 +68,7 @@
 										{
 											"name": "phase_id",
 											"value": {
-												"value": "@item().phaseid",
+												"value": "@item().id",
 												"type": "Expression"
 											}
 										}
