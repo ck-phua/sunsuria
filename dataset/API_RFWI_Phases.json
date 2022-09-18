@@ -12,7 +12,7 @@
 			},
 			"projectid": {
 				"type": "string",
-				"defaultValue": "project_id=1"
+				"defaultValue": "&project_id=1"
 			}
 		},
 		"annotations": [],
