@@ -1,0 +1,192 @@
+{
+	"name": "LoadRFWI_List",
+	"properties": {
+		"activities": [
+			{
+				"name": "GetPhaseList",
+				"type": "Script",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"linkedServiceName": {
+					"referenceName": "SunsuriaDM",
+					"type": "LinkedServiceReference"
+				},
+				"typeProperties": {
+					"scripts": [
+						{
+							"type": "Query",
+							"text": "SELECT id FROM [MyTaman_RFWI_Phases]\n\n"
+						},
+						{
+							"type": "NonQuery",
+							"text": "DELETE [Stg_MyTaman_RFWI_List]"
+						}
+					]
+				}
+			},
+			{
+				"name": "ForEach_ProjectID",
+				"type": "ForEach",
+				"dependsOn": [
+					{
+						"activity": "GetPhaseList",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@activity('GetPhaseList').output.resultSets[0].Rows",
+						"type": "Expression"
+					},
+					"activities": [
+						{
+							"name": "Copy RFWI_List",
+							"type": "Copy",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "RestSource",
+									"httpRequestTimeout": "00:01:40",
+									"requestInterval": "00.00:00:00.010",
+									"requestMethod": "POST",
+									"paginationRules": {
+										"supportRFC5988": "true"
+									}
+								},
+								"sink": {
+									"type": "AzureSqlSink",
+									"writeBehavior": "insert",
+									"sqlWriterUseTableLock": false
+								},
+								"enableStaging": false,
+								"translator": {
+									"type": "TabularTranslator",
+									"mappings": [
+										{
+											"source": {
+												"path": "['id']"
+											},
+											"sink": {
+												"name": "id",
+												"type": "Int32"
+											}
+										},
+										{
+											"source": {
+												"path": "['phase_code']"
+											},
+											"sink": {
+												"name": "phase_code",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"path": "['phase_name']"
+											},
+											"sink": {
+												"name": "phase_name",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"path": "['project_id']"
+											},
+											"sink": {
+												"name": "project_id",
+												"type": "Int32"
+											}
+										},
+										{
+											"source": {
+												"path": "['company_id']"
+											},
+											"sink": {
+												"name": "company_id",
+												"type": "Int32"
+											}
+										}
+									],
+									"collectionReference": "$['phases']"
+								}
+							},
+							"inputs": [
+								{
+									"referenceName": "API_RFWI_Phases",
+									"type": "DatasetReference",
+									"parameters": {
+										"hash": "hash=CX3QfnaR9CjYStUabZtkL5NYeP8w3zM9W77N3zZFQGgghPj2WkbWemGEWntGhkW4xLvD4RnNuAfnTZMyN3B5Rn5gP3dJgMBdmjcYcXvbJkT5mREgVKCzkRkH5HzfUp3p",
+										"projectid": "@concat('&phase_id=', item().id)"
+									}
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "Stg_RFWI_Phases",
+									"type": "DatasetReference"
+								}
+							]
+						}
+					]
+				}
+			},
+			{
+				"name": "Copy to RFWI_Projects_Phases",
+				"type": "Script",
+				"dependsOn": [
+					{
+						"activity": "ForEach_ProjectID",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"linkedServiceName": {
+					"referenceName": "SunsuriaDM",
+					"type": "LinkedServiceReference"
+				},
+				"typeProperties": {
+					"scripts": [
+						{
+							"type": "NonQuery",
+							"text": "BEGIN TRAN\n   DELETE [MyTaman_RFWI_Phases];\n   INSERT [MyTaman_RFWI_Phases] SELECT * FROM [Stg_MyTaman_RFWI_Phases];\nCOMMIT\n\n"
+						}
+					]
+				}
+			}
+		],
+		"variables": {
+			"companyid": {
+				"type": "String"
+			}
+		},
+		"annotations": []
+	}
+}
