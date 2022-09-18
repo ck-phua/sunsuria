@@ -1,0 +1,12 @@
+{
+	"name": "REST_RFWI",
+	"properties": {
+		"annotations": [],
+		"type": "RestService",
+		"typeProperties": {
+			"url": "https://sunsuria.pegasuswork.com/api/powerbi/rfwi",
+			"enableServerCertificateValidation": true,
+			"authenticationType": "Anonymous"
+		}
+	}
+}
