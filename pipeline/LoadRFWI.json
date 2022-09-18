@@ -26,7 +26,7 @@
 						},
 						{
 							"type": "NonQuery",
-							"text": "DELETE Stg_MyTaman_RFWI_Companies"
+							"text": "DELETE Stg_MyTaman_RFWI_Projects"
 						}
 					]
 				}
