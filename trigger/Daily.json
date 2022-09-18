@@ -15,12 +15,6 @@
 					"referenceName": "LoadVP",
 					"type": "PipelineReference"
 				}
-			},
-			{
-				"pipelineReference": {
-					"referenceName": "LoadRFWI_Projects",
-					"type": "PipelineReference"
-				}
 			}
 		],
 		"type": "ScheduleTrigger",
