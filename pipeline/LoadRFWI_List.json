@@ -32,7 +32,7 @@
 				}
 			},
 			{
-				"name": "ForEach_ProjectID",
+				"name": "ForEach_PhaseID",
 				"type": "ForEach",
 				"dependsOn": [
 					{
@@ -199,7 +199,7 @@
 				"type": "Script",
 				"dependsOn": [
 					{
-						"activity": "ForEach_ProjectID",
+						"activity": "ForEach_PhaseID",
 						"dependencyConditions": [
 							"Succeeded"
 						]
