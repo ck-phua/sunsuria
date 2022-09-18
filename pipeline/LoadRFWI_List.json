@@ -131,11 +131,11 @@
 							},
 							"inputs": [
 								{
-									"referenceName": "API_RFWI_Phases",
+									"referenceName": "API_RFWI_List",
 									"type": "DatasetReference",
 									"parameters": {
 										"hash": "hash=CX3QfnaR9CjYStUabZtkL5NYeP8w3zM9W77N3zZFQGgghPj2WkbWemGEWntGhkW4xLvD4RnNuAfnTZMyN3B5Rn5gP3dJgMBdmjcYcXvbJkT5mREgVKCzkRkH5HzfUp3p",
-										"projectid": "@concat('&phase_id=', item().id)"
+										"phaseid": "@concat('&phase_id=', item().id)"
 									}
 								}
 							],
