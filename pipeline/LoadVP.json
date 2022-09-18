@@ -50,7 +50,7 @@
 					},
 					"activities": [
 						{
-							"name": "Copy data2",
+							"name": "Copy VP_Units",
 							"type": "Copy",
 							"dependsOn": [],
 							"policy": {
