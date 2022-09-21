@@ -202,6 +202,72 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/API_RFWI_List')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "REST_RFWI",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"hash": {
+						"type": "string",
+						"defaultValue": "hash=CX3QfnaR9CjYStUabZtkL5NYeP8w3zM9W77N3zZFQGgghPj2WkbWemGEWntGhkW4xLvD4RnNuAfnTZMyN3B5Rn5gP3dJgMBdmjcYcXvbJkT5mREgVKCzkRkH5HzfUp3p"
+					},
+					"phaseid": {
+						"type": "string",
+						"defaultValue": "&phase_id=1"
+					}
+				},
+				"annotations": [],
+				"type": "RestResource",
+				"typeProperties": {
+					"relativeUrl": {
+						"value": "@concat('getRFWIList?',dataset().hash,dataset().phaseid)",
+						"type": "Expression"
+					}
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/REST_RFWI')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/API_RFWI_Phases')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "REST_RFWI",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"hash": {
+						"type": "string",
+						"defaultValue": "hash=CX3QfnaR9CjYStUabZtkL5NYeP8w3zM9W77N3zZFQGgghPj2WkbWemGEWntGhkW4xLvD4RnNuAfnTZMyN3B5Rn5gP3dJgMBdmjcYcXvbJkT5mREgVKCzkRkH5HzfUp3p"
+					},
+					"projectid": {
+						"type": "string",
+						"defaultValue": "&project_id=1"
+					}
+				},
+				"annotations": [],
+				"type": "RestResource",
+				"typeProperties": {
+					"relativeUrl": {
+						"value": "@concat('phases?',dataset().hash,dataset().projectid)",
+						"type": "Expression"
+					}
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/REST_RFWI')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/API_RFWI_Projects')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -494,6 +560,96 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/Stg_RFWI_Phases')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "SunsuriaDM",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "id",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "company_id",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "project_id",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "phase_code",
+						"type": "nvarchar"
+					},
+					{
+						"name": "phase_name",
+						"type": "nvarchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "Stg_MyTaman_RFWI_Phases"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/SunsuriaDM')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Stg_RFWI_Phases_List')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "SunsuriaDM",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "id",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "company_id",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "project_id",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "phase_code",
+						"type": "nvarchar"
+					},
+					{
+						"name": "phase_name",
+						"type": "nvarchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "Stg_MyTaman_RFWI_List"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/SunsuriaDM')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/Stg_Units')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -690,162 +846,6 @@
 				"typeProperties": {
 					"schema": "dbo",
 					"table": "Stg_MyTaman_VP_Units"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/SunsuriaDM')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/API_RFWI_Phases')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "REST_RFWI",
-					"type": "LinkedServiceReference"
-				},
-				"parameters": {
-					"hash": {
-						"type": "string",
-						"defaultValue": "hash=CX3QfnaR9CjYStUabZtkL5NYeP8w3zM9W77N3zZFQGgghPj2WkbWemGEWntGhkW4xLvD4RnNuAfnTZMyN3B5Rn5gP3dJgMBdmjcYcXvbJkT5mREgVKCzkRkH5HzfUp3p"
-					},
-					"projectid": {
-						"type": "string",
-						"defaultValue": "&project_id=1"
-					}
-				},
-				"annotations": [],
-				"type": "RestResource",
-				"typeProperties": {
-					"relativeUrl": {
-						"value": "@concat('phases?',dataset().hash,dataset().projectid)",
-						"type": "Expression"
-					}
-				},
-				"schema": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/REST_RFWI')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/Stg_RFWI_Phases')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "SunsuriaDM",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "AzureSqlTable",
-				"schema": [
-					{
-						"name": "id",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "company_id",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "project_id",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "phase_code",
-						"type": "nvarchar"
-					},
-					{
-						"name": "phase_name",
-						"type": "nvarchar"
-					}
-				],
-				"typeProperties": {
-					"schema": "dbo",
-					"table": "Stg_MyTaman_RFWI_Phases"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/SunsuriaDM')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/API_RFWI_List')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "REST_RFWI",
-					"type": "LinkedServiceReference"
-				},
-				"parameters": {
-					"hash": {
-						"type": "string",
-						"defaultValue": "hash=CX3QfnaR9CjYStUabZtkL5NYeP8w3zM9W77N3zZFQGgghPj2WkbWemGEWntGhkW4xLvD4RnNuAfnTZMyN3B5Rn5gP3dJgMBdmjcYcXvbJkT5mREgVKCzkRkH5HzfUp3p"
-					},
-					"phaseid": {
-						"type": "string",
-						"defaultValue": "&phase_id=1"
-					}
-				},
-				"annotations": [],
-				"type": "RestResource",
-				"typeProperties": {
-					"relativeUrl": {
-						"value": "@concat('getRFWIList?',dataset().hash,dataset().phaseid)",
-						"type": "Expression"
-					}
-				},
-				"schema": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/REST_RFWI')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/Stg_RFWI_Phases_List')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "SunsuriaDM",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "AzureSqlTable",
-				"schema": [
-					{
-						"name": "id",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "company_id",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "project_id",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "phase_code",
-						"type": "nvarchar"
-					},
-					{
-						"name": "phase_name",
-						"type": "nvarchar"
-					}
-				],
-				"typeProperties": {
-					"schema": "dbo",
-					"table": "Stg_MyTaman_RFWI_List"
 				}
 			},
 			"dependsOn": [
