@@ -2967,6 +2967,95 @@
 							"referenceName": "SunsuriaDM",
 							"type": "LinkedServiceReference"
 						}
+					},
+					{
+						"name": "Load Deleted Defects",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "RestSource",
+								"httpRequestTimeout": "00:01:40",
+								"requestInterval": "00.00:00:00.010",
+								"requestMethod": "GET",
+								"paginationRules": {
+									"supportRFC5988": "true"
+								}
+							},
+							"sink": {
+								"type": "AzureSqlSink",
+								"preCopyScript": "DELETE MyTaman_DeletedDefects",
+								"writeBehavior": "insert",
+								"sqlWriterUseTableLock": false,
+								"disableMetricsCollection": false
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"path": "$['deleted_work_order_ids']"
+										},
+										"sink": {
+											"name": "defect_id_list",
+											"type": "String"
+										}
+									}
+								],
+								"collectionReference": "",
+								"mapComplexValuesToString": true
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "API_Defects_Deleted_Defects",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "Tbl_DeletedDefects",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					},
+					{
+						"name": "Exec DeleteDefects",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [
+							{
+								"activity": "Load Deleted Defects",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[dbo].[DeleteDefects]"
+						},
+						"linkedServiceName": {
+							"referenceName": "SunsuriaDM",
+							"type": "LinkedServiceReference"
+						}
 					}
 				],
 				"policy": {
@@ -2978,7 +3067,9 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/API_Defects_Deleted_Forms')]",
 				"[concat(variables('factoryId'), '/datasets/Tbl_DeletedForms')]",
-				"[concat(variables('factoryId'), '/linkedServices/SunsuriaDM')]"
+				"[concat(variables('factoryId'), '/linkedServices/SunsuriaDM')]",
+				"[concat(variables('factoryId'), '/datasets/API_Defects_Deleted_Defects')]",
+				"[concat(variables('factoryId'), '/datasets/Tbl_DeletedDefects')]"
 			]
 		},
 		{
@@ -3021,6 +3112,52 @@
 				"typeProperties": {
 					"schema": "dbo",
 					"table": "MyTaman_DeletedForms"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/SunsuriaDM')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/API_Defects_Deleted_Defects')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "REST_Defects",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "RestResource",
+				"typeProperties": {
+					"relativeUrl": "deleted_work_order_ids?auth_token=ajDAiGUgqYjz5HwHVYD61ccm"
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/REST_Defects')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Tbl_DeletedDefects')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "SunsuriaDM",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "defect_id_list",
+						"type": "nvarchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "MyTaman_DeletedDefects"
 				}
 			},
 			"dependsOn": [
