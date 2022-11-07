@@ -1,0 +1,21 @@
+{
+	"name": "Tbl_DeletedForms_copy1",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "SunsuriaDM",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "defect_id_list",
+				"type": "nvarchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "MyTaman_DeletedDefects"
+		}
+	}
+}
