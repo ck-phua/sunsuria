@@ -123,10 +123,11 @@
 						"mappings": [
 							{
 								"source": {
-									"path": "$['deleted_work_orders_ids']"
+									"path": "$['deleted_work_order_ids']"
 								},
 								"sink": {
-									"name": "defect_id_list"
+									"name": "defect_id_list",
+									"type": "String"
 								}
 							}
 						],
