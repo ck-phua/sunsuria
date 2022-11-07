@@ -1,0 +1,15 @@
+{
+	"name": "API_Defects_Deleted_Forms",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "REST_Defects",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "RestResource",
+		"typeProperties": {
+			"relativeUrl": "deleted_vacant_possession_ids?auth_token=ajDAiGUgqYjz5HwHVYD61ccm"
+		},
+		"schema": []
+	}
+}
