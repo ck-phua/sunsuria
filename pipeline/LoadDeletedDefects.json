@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Load Projects",
+				"name": "Load Deleted Forms",
 				"type": "Copy",
 				"dependsOn": [],
 				"policy": {
@@ -66,7 +66,7 @@
 				"type": "SqlServerStoredProcedure",
 				"dependsOn": [
 					{
-						"activity": "Load Projects",
+						"activity": "Load Deleted Forms",
 						"dependencyConditions": [
 							"Succeeded"
 						]
