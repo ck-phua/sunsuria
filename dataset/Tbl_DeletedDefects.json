@@ -1,5 +1,5 @@
 {
-	"name": "Tbl_DeletedForms_copy1",
+	"name": "Tbl_DeletedDefects",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "SunsuriaDM",
