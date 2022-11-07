@@ -1,0 +1,99 @@
+{
+	"name": "LoadDeletedDefects",
+	"properties": {
+		"activities": [
+			{
+				"name": "Load Projects",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "RestSource",
+						"httpRequestTimeout": "00:01:40",
+						"requestInterval": "00.00:00:00.010",
+						"requestMethod": "GET",
+						"paginationRules": {
+							"supportRFC5988": "true"
+						}
+					},
+					"sink": {
+						"type": "AzureSqlSink",
+						"preCopyScript": "DELETE MyTaman_DeletedForms",
+						"writeBehavior": "insert",
+						"sqlWriterUseTableLock": false,
+						"disableMetricsCollection": false
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"path": "$['deleted_vacant_possession_ids'][0]"
+								},
+								"sink": {
+									"name": "form_id_list",
+									"type": "String"
+								}
+							}
+						],
+						"collectionReference": "$['deleted_vacant_possession_ids']"
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "API_Defects_Deleted_Forms",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "Tbl_DeletedForms",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "Copy to MyTaman_Projects",
+				"type": "Script",
+				"dependsOn": [
+					{
+						"activity": "Load Projects",
+						"dependencyConditions": [
+							"Skipped"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"linkedServiceName": {
+					"referenceName": "SunsuriaDM",
+					"type": "LinkedServiceReference"
+				},
+				"typeProperties": {
+					"scripts": [
+						{
+							"type": "NonQuery",
+							"text": "BEGIN TRAN\n   DELETE MyTaman_Projects;\n   INSERT MyTaman_Projects SELECT * FROM Stg_MyTaman_Projects;\nCOMMIT\n"
+						}
+					]
+				}
+			}
+		],
+		"annotations": []
+	}
+}
