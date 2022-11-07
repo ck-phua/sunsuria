@@ -62,13 +62,13 @@
 				]
 			},
 			{
-				"name": "Copy to MyTaman_Projects",
-				"type": "Script",
+				"name": "Exec DeleteForms",
+				"type": "SqlServerStoredProcedure",
 				"dependsOn": [
 					{
 						"activity": "Load Projects",
 						"dependencyConditions": [
-							"Skipped"
+							"Succeeded"
 						]
 					}
 				],
@@ -80,17 +80,12 @@
 					"secureInput": false
 				},
 				"userProperties": [],
+				"typeProperties": {
+					"storedProcedureName": "[dbo].[DeleteForms]"
+				},
 				"linkedServiceName": {
 					"referenceName": "SunsuriaDM",
 					"type": "LinkedServiceReference"
-				},
-				"typeProperties": {
-					"scripts": [
-						{
-							"type": "NonQuery",
-							"text": "BEGIN TRAN\n   DELETE MyTaman_Projects;\n   INSERT MyTaman_Projects SELECT * FROM Stg_MyTaman_Projects;\nCOMMIT\n"
-						}
-					]
 				}
 			}
 		],
