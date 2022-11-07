@@ -37,7 +37,7 @@
 						"mappings": [
 							{
 								"source": {
-									"path": "$['deleted_vacant_possession_ids'][0]"
+									"path": "$['deleted_vacant_possession_ids']"
 								},
 								"sink": {
 									"name": "form_id",
