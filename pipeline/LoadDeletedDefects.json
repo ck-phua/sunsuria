@@ -40,13 +40,13 @@
 									"path": "$['deleted_vacant_possession_ids'][0]"
 								},
 								"sink": {
-									"name": "form_id_list",
-									"type": "String"
+									"name": "form_id",
+									"type": "Int32"
 								}
 							}
 						],
 						"collectionReference": "$['deleted_vacant_possession_ids']",
-						"mapComplexValuesToString": true
+						"mapComplexValuesToString": false
 					}
 				},
 				"inputs": [
