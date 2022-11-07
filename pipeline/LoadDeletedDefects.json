@@ -45,7 +45,8 @@
 								}
 							}
 						],
-						"collectionReference": "$['deleted_vacant_possession_ids']"
+						"collectionReference": "$['deleted_vacant_possession_ids']",
+						"mapComplexValuesToString": true
 					}
 				},
 				"inputs": [
