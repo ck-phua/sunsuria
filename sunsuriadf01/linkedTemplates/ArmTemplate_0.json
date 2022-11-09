@@ -87,6 +87,46 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/API_Defects_Deleted_Defects')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "REST_Defects",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "RestResource",
+				"typeProperties": {
+					"relativeUrl": "deleted_work_order_ids?auth_token=ajDAiGUgqYjz5HwHVYD61ccm"
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/REST_Defects')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/API_Defects_Deleted_Forms')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "REST_Defects",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "RestResource",
+				"typeProperties": {
+					"relativeUrl": "deleted_vacant_possession_ids?auth_token=ajDAiGUgqYjz5HwHVYD61ccm"
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/REST_Defects')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/API_Defects_Forms')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -643,209 +683,6 @@
 				"typeProperties": {
 					"schema": "dbo",
 					"table": "Stg_MyTaman_RFWI_List"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/SunsuriaDM')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/Stg_Units')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "SunsuriaDM",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "AzureSqlTable",
-				"schema": [
-					{
-						"name": "id",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "unit_number",
-						"type": "nvarchar"
-					},
-					{
-						"name": "unit_address",
-						"type": "nvarchar"
-					},
-					{
-						"name": "unit_block",
-						"type": "nvarchar"
-					},
-					{
-						"name": "unit_level",
-						"type": "nvarchar"
-					},
-					{
-						"name": "owner_name",
-						"type": "nvarchar"
-					},
-					{
-						"name": "owner_address",
-						"type": "nvarchar"
-					},
-					{
-						"name": "owner_contact",
-						"type": "nvarchar"
-					},
-					{
-						"name": "owner_email",
-						"type": "nvarchar"
-					},
-					{
-						"name": "defects_liability_start_date",
-						"type": "nvarchar"
-					},
-					{
-						"name": "project_id",
-						"type": "int",
-						"precision": 10
-					}
-				],
-				"typeProperties": {
-					"schema": "dbo",
-					"table": "Stg_MyTaman_Units"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/SunsuriaDM')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/Stg_VP_Units')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "SunsuriaDM",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "AzureSqlTable",
-				"schema": [
-					{
-						"name": "id",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "customer_id",
-						"type": "nvarchar"
-					},
-					{
-						"name": "company_id",
-						"type": "nvarchar"
-					},
-					{
-						"name": "project_id",
-						"type": "nvarchar"
-					},
-					{
-						"name": "phase_id",
-						"type": "nvarchar"
-					},
-					{
-						"name": "vp_status",
-						"type": "nvarchar"
-					},
-					{
-						"name": "loan_drawdown",
-						"type": "nvarchar"
-					},
-					{
-						"name": "payment_status",
-						"type": "nvarchar"
-					},
-					{
-						"name": "slot_id",
-						"type": "nvarchar"
-					},
-					{
-						"name": "appointment_date_time",
-						"type": "nvarchar"
-					},
-					{
-						"name": "vp_inventory_checklist_done",
-						"type": "nvarchar"
-					},
-					{
-						"name": "vp_survey_done",
-						"type": "nvarchar"
-					},
-					{
-						"name": "key_collected",
-						"type": "nvarchar"
-					},
-					{
-						"name": "vp_date",
-						"type": "nvarchar"
-					},
-					{
-						"name": "unit_code",
-						"type": "nvarchar"
-					},
-					{
-						"name": "unit_name",
-						"type": "nvarchar"
-					},
-					{
-						"name": "lot_address",
-						"type": "nvarchar"
-					},
-					{
-						"name": "buyer",
-						"type": "nvarchar"
-					},
-					{
-						"name": "authorized_name",
-						"type": "nvarchar"
-					},
-					{
-						"name": "authorized_contact",
-						"type": "nvarchar"
-					},
-					{
-						"name": "authorized_email",
-						"type": "nvarchar"
-					},
-					{
-						"name": "authorized_nric",
-						"type": "nvarchar"
-					},
-					{
-						"name": "mobile_phone",
-						"type": "nvarchar"
-					},
-					{
-						"name": "email",
-						"type": "nvarchar"
-					},
-					{
-						"name": "address",
-						"type": "nvarchar"
-					},
-					{
-						"name": "company_name",
-						"type": "nvarchar"
-					},
-					{
-						"name": "project_name",
-						"type": "nvarchar"
-					},
-					{
-						"name": "phase_name",
-						"type": "nvarchar"
-					}
-				],
-				"typeProperties": {
-					"schema": "dbo",
-					"table": "Stg_MyTaman_VP_Units"
 				}
 			},
 			"dependsOn": [
