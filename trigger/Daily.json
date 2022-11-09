@@ -21,6 +21,12 @@
 					"referenceName": "Load RFWI",
 					"type": "PipelineReference"
 				}
+			},
+			{
+				"pipelineReference": {
+					"referenceName": "LoadDeletedDefects",
+					"type": "PipelineReference"
+				}
 			}
 		],
 		"type": "ScheduleTrigger",
