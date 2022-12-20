@@ -1,0 +1,12 @@
+{
+	"name": "BHP_SalesCSV",
+	"properties": {
+		"annotations": [],
+		"type": "HttpServer",
+		"typeProperties": {
+			"url": "https://suezcap-my.sharepoint.com/:x:/g/personal/bhp_ifcadata_bangsarhillpark_com/EbDnmPiAemBFilWFgRQoY-oBD-Re62BhcxU6jRyBGSp61Q?e=RAUYyJ",
+			"enableServerCertificateValidation": false,
+			"authenticationType": "Anonymous"
+		}
+	}
+}
