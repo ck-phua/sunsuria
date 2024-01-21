@@ -11,6 +11,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'SunsuriaDM'"
 		},
+		"BHP_SalesCSV_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://suezcap-my.sharepoint.com/:x:/g/personal/bhp_ifcadata_bangsarhillpark_com/EbDnmPiAemBFilWFgRQoY-oBD-Re62BhcxU6jRyBGSp61Q?e=RAUYyJ"
+		},
 		"REST_Defects_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://engine.pegasuswork.com/powerbi_api"
@@ -52,6 +56,9 @@
 					},
 					"SunsuriaDM_connectionString": {
 						"value": "[parameters('SunsuriaDM_connectionString')]"
+					},
+					"BHP_SalesCSV_properties_typeProperties_url": {
+						"value": "[parameters('BHP_SalesCSV_properties_typeProperties_url')]"
 					},
 					"REST_Defects_properties_typeProperties_url": {
 						"value": "[parameters('REST_Defects_properties_typeProperties_url')]"

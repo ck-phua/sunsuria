@@ -8,6 +8,9 @@
 		"SunsuriaDM_connectionString": {
 			"value": ""
 		},
+		"BHP_SalesCSV_properties_typeProperties_url": {
+			"value": "https://suezcap-my.sharepoint.com/:x:/g/personal/bhp_ifcadata_bangsarhillpark_com/EbDnmPiAemBFilWFgRQoY-oBD-Re62BhcxU6jRyBGSp61Q?e=RAUYyJ"
+		},
 		"REST_Defects_properties_typeProperties_url": {
 			"value": "https://engine.pegasuswork.com/powerbi_api"
 		},

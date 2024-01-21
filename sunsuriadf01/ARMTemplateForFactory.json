@@ -11,6 +11,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'SunsuriaDM'"
 		},
+		"BHP_SalesCSV_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://suezcap-my.sharepoint.com/:x:/g/personal/bhp_ifcadata_bangsarhillpark_com/EbDnmPiAemBFilWFgRQoY-oBD-Re62BhcxU6jRyBGSp61Q?e=RAUYyJ"
+		},
 		"REST_Defects_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://engine.pegasuswork.com/powerbi_api"
@@ -38,6 +42,9 @@
 						"name": "Exec LoadRFWI_Projects",
 						"type": "ExecutePipeline",
 						"dependsOn": [],
+						"policy": {
+							"secureInput": false
+						},
 						"userProperties": [],
 						"typeProperties": {
 							"pipeline": {
@@ -59,6 +66,9 @@
 								]
 							}
 						],
+						"policy": {
+							"secureInput": false
+						},
 						"userProperties": [],
 						"typeProperties": {
 							"pipeline": {
@@ -80,6 +90,9 @@
 								]
 							}
 						],
+						"policy": {
+							"secureInput": false
+						},
 						"userProperties": [],
 						"typeProperties": {
 							"pipeline": {
@@ -92,8 +105,7 @@
 					}
 				],
 				"policy": {
-					"elapsedTimeMetric": {},
-					"cancelAfter": {}
+					"elapsedTimeMetric": {}
 				},
 				"annotations": []
 			},
@@ -897,8 +909,7 @@
 					}
 				],
 				"policy": {
-					"elapsedTimeMetric": {},
-					"cancelAfter": {}
+					"elapsedTimeMetric": {}
 				},
 				"annotations": []
 			},
@@ -1099,8 +1110,7 @@
 					}
 				],
 				"policy": {
-					"elapsedTimeMetric": {},
-					"cancelAfter": {}
+					"elapsedTimeMetric": {}
 				},
 				"annotations": []
 			},
@@ -1189,7 +1199,7 @@
 													}
 												}
 											],
-											"httpRequestTimeout": "00:01:40",
+											"httpRequestTimeout": "00:03:30",
 											"requestInterval": "00.00:00:00.010",
 											"requestMethod": "POST",
 											"paginationRules": {
@@ -1364,8 +1374,7 @@
 					}
 				],
 				"policy": {
-					"elapsedTimeMetric": {},
-					"cancelAfter": {}
+					"elapsedTimeMetric": {}
 				},
 				"variables": {
 					"companyid": {
@@ -1568,8 +1577,7 @@
 					}
 				],
 				"policy": {
-					"elapsedTimeMetric": {},
-					"cancelAfter": {}
+					"elapsedTimeMetric": {}
 				},
 				"variables": {
 					"companyid": {
@@ -1763,8 +1771,7 @@
 					}
 				],
 				"policy": {
-					"elapsedTimeMetric": {},
-					"cancelAfter": {}
+					"elapsedTimeMetric": {}
 				},
 				"variables": {
 					"companyid": {
@@ -2177,8 +2184,7 @@
 					}
 				],
 				"policy": {
-					"elapsedTimeMetric": {},
-					"cancelAfter": {}
+					"elapsedTimeMetric": {}
 				},
 				"variables": {
 					"companyid": {
@@ -3050,6 +3056,21 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/SunsuriaDM')]"
 			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/BHP_SalesCSV')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "HttpServer",
+				"typeProperties": {
+					"url": "[parameters('BHP_SalesCSV_properties_typeProperties_url')]",
+					"enableServerCertificateValidation": false,
+					"authenticationType": "Anonymous"
+				}
+			},
+			"dependsOn": []
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/REST_Defects')]",
