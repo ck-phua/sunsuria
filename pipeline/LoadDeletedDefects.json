@@ -176,6 +176,9 @@
 				}
 			}
 		],
+		"folder": {
+			"name": "PegasusWork"
+		},
 		"annotations": []
 	}
 }

@@ -6,6 +6,9 @@
 				"name": "Exec LoadRFWI_Projects",
 				"type": "ExecutePipeline",
 				"dependsOn": [],
+				"policy": {
+					"secureInput": false
+				},
 				"userProperties": [],
 				"typeProperties": {
 					"pipeline": {
@@ -26,6 +29,9 @@
 						]
 					}
 				],
+				"policy": {
+					"secureInput": false
+				},
 				"userProperties": [],
 				"typeProperties": {
 					"pipeline": {
@@ -46,6 +52,9 @@
 						]
 					}
 				],
+				"policy": {
+					"secureInput": false
+				},
 				"userProperties": [],
 				"typeProperties": {
 					"pipeline": {
@@ -56,6 +65,9 @@
 				}
 			}
 		],
+		"folder": {
+			"name": "PegasusWork"
+		},
 		"annotations": []
 	}
 }

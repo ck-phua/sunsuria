@@ -251,6 +251,9 @@
 				"type": "String"
 			}
 		},
+		"folder": {
+			"name": "PegasusWork"
+		},
 		"annotations": []
 	}
 }
