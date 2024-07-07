@@ -107,6 +107,9 @@
 				"policy": {
 					"elapsedTimeMetric": {}
 				},
+				"folder": {
+					"name": "PegasusWork"
+				},
 				"annotations": []
 			},
 			"dependsOn": [
@@ -911,6 +914,9 @@
 				"policy": {
 					"elapsedTimeMetric": {}
 				},
+				"folder": {
+					"name": "PegasusWork"
+				},
 				"annotations": []
 			},
 			"dependsOn": [
@@ -1111,6 +1117,9 @@
 				],
 				"policy": {
 					"elapsedTimeMetric": {}
+				},
+				"folder": {
+					"name": "PegasusWork"
 				},
 				"annotations": []
 			},
@@ -1381,6 +1390,9 @@
 						"type": "String"
 					}
 				},
+				"folder": {
+					"name": "PegasusWork"
+				},
 				"annotations": []
 			},
 			"dependsOn": [
@@ -1584,6 +1596,9 @@
 						"type": "String"
 					}
 				},
+				"folder": {
+					"name": "PegasusWork"
+				},
 				"annotations": []
 			},
 			"dependsOn": [
@@ -1777,6 +1792,9 @@
 					"companyid": {
 						"type": "String"
 					}
+				},
+				"folder": {
+					"name": "PegasusWork"
 				},
 				"annotations": []
 			},
@@ -2190,6 +2208,9 @@
 					"companyid": {
 						"type": "String"
 					}
+				},
+				"folder": {
+					"name": "PegasusWork"
 				},
 				"annotations": []
 			},
