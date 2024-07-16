@@ -26,7 +26,7 @@
 					},
 					"sink": {
 						"type": "AzureSqlSink",
-						"preCopyScript": "DELETE MyTaman_DeletedForms",
+						"preCopyScript": "DELETE [Stg_CRM_getDealData]",
 						"writeBehavior": "insert",
 						"sqlWriterUseTableLock": false,
 						"disableMetricsCollection": false
@@ -37,10 +37,164 @@
 						"mappings": [
 							{
 								"source": {
-									"path": "$['deleted_vacant_possession_ids']"
+									"path": "$['record'][0]['opportunity_ref_id']"
 								},
 								"sink": {
-									"name": "form_id_list"
+									"name": "ref_id",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"path": "$['record'][0]['opportunity_date_time']"
+								},
+								"sink": {
+									"name": "opportunity_date",
+									"type": "DateTime"
+								}
+							},
+							{
+								"source": {
+									"path": "$['record'][0]['opportunity_title']"
+								},
+								"sink": {
+									"name": "opportunity_title",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "$['record'][0]['current_stage']"
+								},
+								"sink": {
+									"name": "current_stage",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "$['record'][0]['marketing_source']"
+								},
+								"sink": {
+									"name": "marketing_source",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "$['record'][0]['lead_name']"
+								},
+								"sink": {
+									"name": "lead_name",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "$['record'][0]['lead_contact_number']"
+								},
+								"sink": {
+									"name": "lead_contact_number",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "$['record'][0]['lead_email_title']"
+								},
+								"sink": {
+									"name": "lead_email",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "$['record'][0]['lead_owner']"
+								},
+								"sink": {
+									"name": "lead_owner",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "$['record'][0]['opportunity_status']"
+								},
+								"sink": {
+									"name": "opportunity_status",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "$['record'][0]['opportunity_status_remark']"
+								},
+								"sink": {
+									"name": "opportunity_status_remark",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "$['record'][0]['lost_reason']"
+								},
+								"sink": {
+									"name": "lost_reason",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "$['record'][0]['utm_source']"
+								},
+								"sink": {
+									"name": "utm_source",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "$['record'][0]['utm_medium']"
+								},
+								"sink": {
+									"name": "utm_medium",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "$['record'][0]['utm_term']"
+								},
+								"sink": {
+									"name": "utm_term",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "$['record'][0]['utm_campaign']"
+								},
+								"sink": {
+									"name": "utm_campaign",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "$['record'][0]['utm_content']"
+								},
+								"sink": {
+									"name": "utm_content",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "$['record'][0]['deal_status_last_updated']"
+								},
+								"sink": {
+									"name": "deal_status_last_updated",
+									"type": "String"
 								}
 							}
 						],
@@ -56,7 +210,7 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "Tbl_DeletedForms",
+						"referenceName": "Stg_CRM_getDealData",
 						"type": "DatasetReference"
 					}
 				]
@@ -81,7 +235,7 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"storedProcedureName": "[dbo].[DeleteForms]"
+					"storedProcedureName": "[dbo].[Insert_CRM_GetDealData]"
 				},
 				"linkedServiceName": {
 					"referenceName": "SunsuriaDM",
