@@ -5,6 +5,14 @@
 			"referenceName": "REST_NexCRM",
 			"type": "LinkedServiceReference"
 		},
+		"parameters": {
+			"ds": {
+				"type": "string"
+			},
+			"de": {
+				"type": "string"
+			}
+		},
 		"annotations": [],
 		"type": "RestResource",
 		"typeProperties": {
