@@ -269,14 +269,9 @@
 									"referenceName": "API_CRM_GetDealData",
 									"type": "DatasetReference",
 									"parameters": {
-										"ds": {
-											"value": "@concat('&ds=', pipeline().parameters.StartDate)",
-											"type": "Expression"
-										},
-										"de": {
-											"value": "@concat('&de=', pipeline().parameters.EndDate)",
-											"type": "Expression"
-										}
+										"ds": "&ds=2024-01-01",
+										"de": "&de=2024-01-01",
+										"api_token": "&api_token=3ca45389e66a542b34ffe6a29ad9aa06"
 									}
 								}
 							],
