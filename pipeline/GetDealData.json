@@ -9,7 +9,7 @@
 					{
 						"activity": "Until1",
 						"dependencyConditions": [
-							"Succeeded"
+							"Skipped"
 						]
 					}
 				],
@@ -39,7 +39,7 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"variableName": "LoadDate",
+					"variableName": "LoadDate1",
 					"value": {
 						"value": "@pipeline().parameters.StartDate",
 						"type": "Expression"
@@ -60,7 +60,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"expression": {
-						"value": "@equals(variables('LoadDate'), pipeline().parameters.EndDate)",
+						"value": "@equals(variables('LoadDate2'), pipeline().parameters.EndDate)",
 						"type": "Expression"
 					},
 					"activities": [
@@ -269,9 +269,16 @@
 									"referenceName": "API_CRM_GetDealData",
 									"type": "DatasetReference",
 									"parameters": {
-										"ds": "&ds=2024-01-01",
-										"de": "&de=2024-01-01",
-										"api_token": "&api_token=3ca45389e66a542b34ffe6a29ad9aa06"
+										"ds": {
+											"value": "@concat('&ds=', variables('LoadDate1'))",
+											"type": "Expression"
+										},
+										"de": {
+											"value": "@concat('&de=', variables('LoadDate1'))",
+											"type": "Expression"
+										},
+										"api_token": "&api_token=3ca45389e66a542b34ffe6a29ad9aa06",
+										"secret_key": "&secret_key=3485957268f41b66a676f11857469bcb"
 									}
 								}
 							],
@@ -281,6 +288,54 @@
 									"type": "DatasetReference"
 								}
 							]
+						},
+						{
+							"name": "Increment Date2",
+							"type": "SetVariable",
+							"dependsOn": [
+								{
+									"activity": "GetDealData",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "LoadDate2",
+								"value": {
+									"value": "@formatDateTime(adddays(variables('LoadDate1'),1),'yyyy-MM-dd')",
+									"type": "Expression"
+								}
+							}
+						},
+						{
+							"name": "Set Date1 to Date2",
+							"type": "SetVariable",
+							"dependsOn": [
+								{
+									"activity": "Increment Date2",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "LoadDate1",
+								"value": {
+									"value": "LoadDate2",
+									"type": "Expression"
+								}
+							}
 						}
 					],
 					"timeout": "0.12:00:00"
@@ -298,7 +353,10 @@
 			}
 		},
 		"variables": {
-			"LoadDate": {
+			"LoadDate1": {
+				"type": "String"
+			},
+			"LoadDate2": {
 				"type": "String"
 			}
 		},
