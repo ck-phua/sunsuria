@@ -4,7 +4,7 @@
 		"annotations": [],
 		"type": "RestService",
 		"typeProperties": {
-			"url": "https://www.nexcrmapis.com/cloud/toolbox",
+			"url": "https://www.nexcrmapis.com/cloud/toolbox/",
 			"enableServerCertificateValidation": true,
 			"authenticationType": "Anonymous"
 		}
