@@ -348,7 +348,7 @@
 			},
 			"EndDate": {
 				"type": "string",
-				"defaultValue": "2024-01-02"
+				"defaultValue": "2024-01-31"
 			}
 		},
 		"variables": {
