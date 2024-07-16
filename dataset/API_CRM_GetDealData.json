@@ -7,10 +7,12 @@
 		},
 		"parameters": {
 			"ds": {
-				"type": "string"
+				"type": "string",
+				"defaultValue": "&ds=2024-01-01"
 			},
 			"de": {
-				"type": "string"
+				"type": "string",
+				"defaultValue": "&de=2024-01-01"
 			}
 		},
 		"annotations": [],
