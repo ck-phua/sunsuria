@@ -344,11 +344,11 @@
 		"parameters": {
 			"StartDate": {
 				"type": "string",
-				"defaultValue": "2024-04-01"
+				"defaultValue": "2024-05-01"
 			},
 			"EndDate": {
 				"type": "string",
-				"defaultValue": "2024-05-01"
+				"defaultValue": "2024-06-01"
 			}
 		},
 		"variables": {
