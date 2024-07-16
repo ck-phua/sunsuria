@@ -216,7 +216,7 @@
 				]
 			},
 			{
-				"name": "Exec DeleteForms",
+				"name": "Exec Insert_CRM_GetDealData",
 				"type": "SqlServerStoredProcedure",
 				"dependsOn": [
 					{
