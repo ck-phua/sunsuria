@@ -1,0 +1,315 @@
+{
+	"name": "GetDealData",
+	"properties": {
+		"activities": [
+			{
+				"name": "Exec Insert_CRM_GetDealData",
+				"type": "SqlServerStoredProcedure",
+				"dependsOn": [
+					{
+						"activity": "Until1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"storedProcedureName": "[dbo].[Insert_CRM_GetDealData]"
+				},
+				"linkedServiceName": {
+					"referenceName": "SunsuriaDM",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "Set Load Date",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "LoadDate",
+					"value": {
+						"value": "@pipeline().parameters.StartDate",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Until1",
+				"type": "Until",
+				"dependsOn": [
+					{
+						"activity": "Set Load Date",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"expression": {
+						"value": "@equals(variables('LoadDate'), pipeline().parameters.EndDate)",
+						"type": "Expression"
+					},
+					"activities": [
+						{
+							"name": "GetDealData",
+							"type": "Copy",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "RestSource",
+									"httpRequestTimeout": "00:01:40",
+									"requestInterval": "00.00:00:00.010",
+									"requestMethod": "GET",
+									"paginationRules": {
+										"supportRFC5988": "true"
+									}
+								},
+								"sink": {
+									"type": "AzureSqlSink",
+									"preCopyScript": "DELETE [Stg_CRM_getDealData]",
+									"writeBehavior": "insert",
+									"sqlWriterUseTableLock": false,
+									"disableMetricsCollection": false
+								},
+								"enableStaging": false,
+								"translator": {
+									"type": "TabularTranslator",
+									"mappings": [
+										{
+											"source": {
+												"path": "['opportunity_ref_id']"
+											},
+											"sink": {
+												"name": "ref_id",
+												"type": "Int32"
+											}
+										},
+										{
+											"source": {
+												"path": "['opportunity_date_time']"
+											},
+											"sink": {
+												"name": "opportunity_date",
+												"type": "DateTime"
+											}
+										},
+										{
+											"source": {
+												"path": "['opportunity_title']"
+											},
+											"sink": {
+												"name": "opportunity_title",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"path": "['current_stage']"
+											},
+											"sink": {
+												"name": "current_stage",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"path": "['marketing_source']"
+											},
+											"sink": {
+												"name": "marketing_source",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"path": "['lead_name']"
+											},
+											"sink": {
+												"name": "lead_name",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"path": "['lead_contact_number']"
+											},
+											"sink": {
+												"name": "lead_contact_number",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"path": "['lead_email_title']"
+											},
+											"sink": {
+												"name": "lead_email",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"path": "['lead_owner']"
+											},
+											"sink": {
+												"name": "lead_owner",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"path": "['opportunity_status']"
+											},
+											"sink": {
+												"name": "opportunity_status",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"path": "['opportunity_status_remark']"
+											},
+											"sink": {
+												"name": "opportunity_status_remark",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"path": "['lost_reason']"
+											},
+											"sink": {
+												"name": "lost_reason",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"path": "['utm_source']"
+											},
+											"sink": {
+												"name": "utm_source",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"path": "['utm_medium']"
+											},
+											"sink": {
+												"name": "utm_medium",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"path": "['utm_term']"
+											},
+											"sink": {
+												"name": "utm_term",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"path": "['utm_campaign']"
+											},
+											"sink": {
+												"name": "utm_campaign",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"path": "['utm_content']"
+											},
+											"sink": {
+												"name": "utm_content",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"path": "['deal_status_last_updated']"
+											},
+											"sink": {
+												"name": "deal_status_last_updated",
+												"type": "String"
+											}
+										}
+									],
+									"collectionReference": "$['record']",
+									"mapComplexValuesToString": false
+								}
+							},
+							"inputs": [
+								{
+									"referenceName": "API_CRM_GetDealData",
+									"type": "DatasetReference",
+									"parameters": {
+										"ds": {
+											"value": "@concat('&ds=', pipeline().parameters.StartDate)",
+											"type": "Expression"
+										},
+										"de": {
+											"value": "@concat('&de=', pipeline().parameters.EndDate)",
+											"type": "Expression"
+										}
+									}
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "Stg_CRM_getDealData",
+									"type": "DatasetReference"
+								}
+							]
+						}
+					],
+					"timeout": "0.12:00:00"
+				}
+			}
+		],
+		"parameters": {
+			"StartDate": {
+				"type": "string",
+				"defaultValue": "2024-01-01"
+			},
+			"EndDate": {
+				"type": "string",
+				"defaultValue": "2024-01-01"
+			}
+		},
+		"variables": {
+			"LoadDate": {
+				"type": "String"
+			}
+		},
+		"folder": {
+			"name": "NexCRM"
+		},
+		"annotations": []
+	}
+}
