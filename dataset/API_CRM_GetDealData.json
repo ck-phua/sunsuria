@@ -13,12 +13,23 @@
 			"de": {
 				"type": "string",
 				"defaultValue": "&de=2024-01-01"
+			},
+			"api_token": {
+				"type": "string",
+				"defaultValue": "&api_token=3ca45389e66a542b34ffe6a29ad9aa06"
+			},
+			"secret_key": {
+				"type": "string",
+				"defaultValue": "&secret_key=3485957268f41b66a676f11857469bcb"
 			}
 		},
 		"annotations": [],
 		"type": "RestResource",
 		"typeProperties": {
-			"relativeUrl": "api_retrieve_deal_data?task=getDealData&api_token=3ca45389e66a542b34ffe6a29ad9aa06&secret_key=3485957268f41b66a676f11857469bcb"
+			"relativeUrl": {
+				"value": "@concat('api_retrieve_deal_data?task=getDealData',\ndataset().api_token,\ndataset().secret_key,\ndataset().ds, \ndataset().de)",
+				"type": "Expression"
+			}
 		},
 		"schema": []
 	}
