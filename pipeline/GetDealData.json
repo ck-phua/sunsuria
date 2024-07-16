@@ -88,7 +88,6 @@
 								},
 								"sink": {
 									"type": "AzureSqlSink",
-									"preCopyScript": "DELETE [Stg_CRM_getDealData]",
 									"writeBehavior": "insert",
 									"sqlWriterUseTableLock": false,
 									"disableMetricsCollection": false
@@ -332,7 +331,7 @@
 							"typeProperties": {
 								"variableName": "LoadDate1",
 								"value": {
-									"value": "LoadDate2",
+									"value": "@variables('LoadDate2')",
 									"type": "Expression"
 								}
 							}
@@ -349,7 +348,7 @@
 			},
 			"EndDate": {
 				"type": "string",
-				"defaultValue": "2024-01-01"
+				"defaultValue": "2024-01-02"
 			}
 		},
 		"variables": {
