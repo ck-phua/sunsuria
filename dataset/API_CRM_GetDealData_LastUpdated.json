@@ -8,7 +8,7 @@
 		"annotations": [],
 		"type": "RestResource",
 		"typeProperties": {
-			"relativeUrl": "task=getDealData_Last_Updated&api_token=3ca45389e66a542b34ffe6a29ad9aa06&secret_key=3485957268f41b66a676f11857469bcb&ds=2024-05-01&de=2024-05-05"
+			"relativeUrl": "api_retrieve_deal_data?task=getDealData_Last_Updated&api_token=3ca45389e66a542b34ffe6a29ad9aa06&secret_key=3485957268f41b66a676f11857469bcb&ds=2024-05-01&de=2024-05-05"
 		},
 		"schema": []
 	}
