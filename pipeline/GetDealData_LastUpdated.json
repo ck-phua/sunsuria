@@ -37,7 +37,7 @@
 						"mappings": [
 							{
 								"source": {
-									"path": "$['record'][0]['opportunity_ref_id']"
+									"path": "['opportunity_ref_id']"
 								},
 								"sink": {
 									"name": "ref_id",
@@ -46,7 +46,7 @@
 							},
 							{
 								"source": {
-									"path": "$['record'][0]['opportunity_date_time']"
+									"path": "['opportunity_date_time']"
 								},
 								"sink": {
 									"name": "opportunity_date",
@@ -55,7 +55,7 @@
 							},
 							{
 								"source": {
-									"path": "$['record'][0]['opportunity_title']"
+									"path": "['opportunity_title']"
 								},
 								"sink": {
 									"name": "opportunity_title",
@@ -64,7 +64,7 @@
 							},
 							{
 								"source": {
-									"path": "$['record'][0]['current_stage']"
+									"path": "['current_stage']"
 								},
 								"sink": {
 									"name": "current_stage",
@@ -73,7 +73,7 @@
 							},
 							{
 								"source": {
-									"path": "$['record'][0]['marketing_source']"
+									"path": "['marketing_source']"
 								},
 								"sink": {
 									"name": "marketing_source",
@@ -82,7 +82,7 @@
 							},
 							{
 								"source": {
-									"path": "$['record'][0]['lead_name']"
+									"path": "['lead_name']"
 								},
 								"sink": {
 									"name": "lead_name",
@@ -91,7 +91,7 @@
 							},
 							{
 								"source": {
-									"path": "$['record'][0]['lead_contact_number']"
+									"path": "['lead_contact_number']"
 								},
 								"sink": {
 									"name": "lead_contact_number",
@@ -100,7 +100,7 @@
 							},
 							{
 								"source": {
-									"path": "$['record'][0]['lead_email_title']"
+									"path": "['lead_email_title']"
 								},
 								"sink": {
 									"name": "lead_email",
@@ -109,7 +109,7 @@
 							},
 							{
 								"source": {
-									"path": "$['record'][0]['lead_owner']"
+									"path": "['lead_owner']"
 								},
 								"sink": {
 									"name": "lead_owner",
@@ -118,7 +118,7 @@
 							},
 							{
 								"source": {
-									"path": "$['record'][0]['opportunity_status']"
+									"path": "['opportunity_status']"
 								},
 								"sink": {
 									"name": "opportunity_status",
@@ -127,7 +127,7 @@
 							},
 							{
 								"source": {
-									"path": "$['record'][0]['opportunity_status_remark']"
+									"path": "['opportunity_status_remark']"
 								},
 								"sink": {
 									"name": "opportunity_status_remark",
@@ -136,7 +136,7 @@
 							},
 							{
 								"source": {
-									"path": "$['record'][0]['lost_reason']"
+									"path": "['lost_reason']"
 								},
 								"sink": {
 									"name": "lost_reason",
@@ -145,7 +145,7 @@
 							},
 							{
 								"source": {
-									"path": "$['record'][0]['utm_source']"
+									"path": "['utm_source']"
 								},
 								"sink": {
 									"name": "utm_source",
@@ -154,7 +154,7 @@
 							},
 							{
 								"source": {
-									"path": "$['record'][0]['utm_medium']"
+									"path": "['utm_medium']"
 								},
 								"sink": {
 									"name": "utm_medium",
@@ -163,7 +163,7 @@
 							},
 							{
 								"source": {
-									"path": "$['record'][0]['utm_term']"
+									"path": "['utm_term']"
 								},
 								"sink": {
 									"name": "utm_term",
@@ -172,7 +172,7 @@
 							},
 							{
 								"source": {
-									"path": "$['record'][0]['utm_campaign']"
+									"path": "['utm_campaign']"
 								},
 								"sink": {
 									"name": "utm_campaign",
@@ -181,7 +181,7 @@
 							},
 							{
 								"source": {
-									"path": "$['record'][0]['utm_content']"
+									"path": "['utm_content']"
 								},
 								"sink": {
 									"name": "utm_content",
@@ -190,7 +190,7 @@
 							},
 							{
 								"source": {
-									"path": "$['record'][0]['deal_status_last_updated']"
+									"path": "['deal_status_last_updated']"
 								},
 								"sink": {
 									"name": "deal_status_last_updated",
@@ -199,7 +199,7 @@
 							}
 						],
 						"collectionReference": "$['record']",
-						"mapComplexValuesToString": true
+						"mapComplexValuesToString": false
 					}
 				},
 				"inputs": [
