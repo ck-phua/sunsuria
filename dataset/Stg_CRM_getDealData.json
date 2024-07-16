@@ -1,0 +1,78 @@
+{
+	"name": "Stg_CRM_getDealData",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "SunsuriaDM",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "id",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "title",
+				"type": "nvarchar"
+			},
+			{
+				"name": "description",
+				"type": "nvarchar"
+			},
+			{
+				"name": "status",
+				"type": "nvarchar"
+			},
+			{
+				"name": "workflow_description",
+				"type": "nvarchar"
+			},
+			{
+				"name": "vacant_possession_id",
+				"type": "nvarchar"
+			},
+			{
+				"name": "project_id",
+				"type": "nvarchar"
+			},
+			{
+				"name": "category_one",
+				"type": "nvarchar"
+			},
+			{
+				"name": "category_two",
+				"type": "nvarchar"
+			},
+			{
+				"name": "category_three",
+				"type": "nvarchar"
+			},
+			{
+				"name": "category_four",
+				"type": "nvarchar"
+			},
+			{
+				"name": "created_at",
+				"type": "nvarchar"
+			},
+			{
+				"name": "updated_at",
+				"type": "nvarchar"
+			},
+			{
+				"name": "calculated_id",
+				"type": "nvarchar"
+			},
+			{
+				"name": "created_by",
+				"type": "nvarchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "Stg_CRM_getDealData"
+		}
+	}
+}
