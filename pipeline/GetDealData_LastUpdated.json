@@ -198,7 +198,7 @@
 								}
 							}
 						],
-						"collectionReference": "",
+						"collectionReference": "$['record']",
 						"mapComplexValuesToString": true
 					}
 				},
