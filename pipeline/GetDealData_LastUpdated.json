@@ -1,5 +1,5 @@
 {
-	"name": "LoadDeletedDefects_copy1",
+	"name": "GetDealData_LastUpdated",
 	"properties": {
 		"activities": [
 			{
@@ -50,7 +50,7 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "API_Defects_Deleted_Forms",
+						"referenceName": "API_CRM_GetDealData_LastUpdated",
 						"type": "DatasetReference"
 					}
 				],
