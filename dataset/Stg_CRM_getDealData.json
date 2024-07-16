@@ -9,64 +9,77 @@
 		"type": "AzureSqlTable",
 		"schema": [
 			{
-				"name": "id",
+				"name": "ref_id",
 				"type": "int",
 				"precision": 10
 			},
 			{
-				"name": "title",
+				"name": "opportunity_date",
+				"type": "datetime2",
+				"scale": 7
+			},
+			{
+				"name": "opportunity_title",
 				"type": "nvarchar"
 			},
 			{
-				"name": "description",
+				"name": "current_stage",
 				"type": "nvarchar"
 			},
 			{
-				"name": "status",
+				"name": "marketing_source",
 				"type": "nvarchar"
 			},
 			{
-				"name": "workflow_description",
+				"name": "lead_name",
 				"type": "nvarchar"
 			},
 			{
-				"name": "vacant_possession_id",
+				"name": "lead_contact_number",
 				"type": "nvarchar"
 			},
 			{
-				"name": "project_id",
+				"name": "lead_email",
 				"type": "nvarchar"
 			},
 			{
-				"name": "category_one",
+				"name": "lead_owner",
 				"type": "nvarchar"
 			},
 			{
-				"name": "category_two",
+				"name": "opportunity_status",
 				"type": "nvarchar"
 			},
 			{
-				"name": "category_three",
+				"name": "opportunity_status_remark",
 				"type": "nvarchar"
 			},
 			{
-				"name": "category_four",
+				"name": "lost_reason",
 				"type": "nvarchar"
 			},
 			{
-				"name": "created_at",
+				"name": "utm_source",
 				"type": "nvarchar"
 			},
 			{
-				"name": "updated_at",
+				"name": "utm_medium",
 				"type": "nvarchar"
 			},
 			{
-				"name": "calculated_id",
+				"name": "utm_term",
 				"type": "nvarchar"
 			},
 			{
-				"name": "created_by",
+				"name": "utm_campaign",
+				"type": "nvarchar"
+			},
+			{
+				"name": "utm_content",
+				"type": "nvarchar"
+			},
+			{
+				"name": "deal_status_last_updated",
 				"type": "nvarchar"
 			}
 		],
