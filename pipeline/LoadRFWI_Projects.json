@@ -132,7 +132,7 @@
 							],
 							"outputs": [
 								{
-									"referenceName": "Stg_RFWI_Companies",
+									"referenceName": "Stg_RFWI_Projects",
 									"type": "DatasetReference"
 								}
 							]
