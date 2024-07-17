@@ -1,5 +1,5 @@
 {
-	"name": "Stg_RFWI_Companies",
+	"name": "Stg_RFWI_Projects",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "SunsuriaDM",
