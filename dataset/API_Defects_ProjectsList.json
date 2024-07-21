@@ -8,7 +8,7 @@
 		"annotations": [],
 		"type": "RestResource",
 		"typeProperties": {
-			"relativeUrl": "projects_list?auth_token=ajDAiGUgqYjz5HwHVYD61ccm"
+			"relativeUrl": "projects_list?no_pagination=true&auth_token=ajDAiGUgqYjz5HwHVYD61ccm"
 		},
 		"schema": []
 	}
