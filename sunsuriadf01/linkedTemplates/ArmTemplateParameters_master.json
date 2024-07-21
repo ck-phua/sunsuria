@@ -14,6 +14,9 @@
 		"REST_Defects_properties_typeProperties_url": {
 			"value": "https://engine.pegasuswork.com/powerbi_api"
 		},
+		"REST_NexCRM_properties_typeProperties_url": {
+			"value": "https://www.nexcrmapis.com/cloud/toolbox"
+		},
 		"REST_RFWI_properties_typeProperties_url": {
 			"value": "https://sunsuria.pegasuswork.com/api/powerbi/rfwi"
 		},

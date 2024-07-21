@@ -13,6 +13,148 @@
 	},
 	"resources": [
 		{
+			"name": "[concat(parameters('factoryName'), '/Stg_Forms')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "SunsuriaDM",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "id",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "unit_owner_id",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "status",
+						"type": "nvarchar"
+					},
+					{
+						"name": "sign_off_date",
+						"type": "nvarchar"
+					},
+					{
+						"name": "complete_date",
+						"type": "nvarchar"
+					},
+					{
+						"name": "closed_date",
+						"type": "nvarchar"
+					},
+					{
+						"name": "stage",
+						"type": "nvarchar"
+					},
+					{
+						"name": "project_id",
+						"type": "nvarchar"
+					},
+					{
+						"name": "created_at",
+						"type": "nvarchar"
+					},
+					{
+						"name": "updated_at",
+						"type": "nvarchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "Stg_MyTaman_Forms"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Stg_Projects')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "SunsuriaDM",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "id",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "name",
+						"type": "nvarchar"
+					},
+					{
+						"name": "address",
+						"type": "nvarchar"
+					},
+					{
+						"name": "stage",
+						"type": "nvarchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "Stg_MyTaman_Projects"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Stg_RFWI_Phases')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "SunsuriaDM",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "id",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "company_id",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "project_id",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "phase_code",
+						"type": "nvarchar"
+					},
+					{
+						"name": "phase_name",
+						"type": "nvarchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "Stg_MyTaman_RFWI_Phases"
+				}
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/Stg_RFWI_Phases_List')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -51,6 +193,44 @@
 				"typeProperties": {
 					"schema": "dbo",
 					"table": "Stg_MyTaman_RFWI_List"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Stg_RFWI_Projects')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "SunsuriaDM",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "id",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "company_id",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "project_code",
+						"type": "nvarchar"
+					},
+					{
+						"name": "project_name",
+						"type": "nvarchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "Stg_MyTaman_RFWI_Projects"
 				}
 			},
 			"dependsOn": []
@@ -299,6 +479,639 @@
 					"schema": "dbo",
 					"table": "MyTaman_DeletedForms"
 				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/GetDealData')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Exec Insert_CRM_GetDealData",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [
+							{
+								"activity": "Until1",
+								"dependencyConditions": [
+									"Skipped"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[dbo].[Insert_CRM_GetDealData]"
+						},
+						"linkedServiceName": {
+							"referenceName": "SunsuriaDM",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "Set Load Date",
+						"type": "SetVariable",
+						"dependsOn": [],
+						"policy": {
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "LoadDate1",
+							"value": {
+								"value": "@pipeline().parameters.StartDate",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "Until1",
+						"type": "Until",
+						"dependsOn": [
+							{
+								"activity": "Set Load Date",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"expression": {
+								"value": "@equals(variables('LoadDate2'), pipeline().parameters.EndDate)",
+								"type": "Expression"
+							},
+							"activities": [
+								{
+									"name": "GetDealData",
+									"type": "Copy",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "0.12:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"source": {
+											"type": "RestSource",
+											"httpRequestTimeout": "00:01:40",
+											"requestInterval": "00.00:00:00.010",
+											"requestMethod": "GET",
+											"paginationRules": {
+												"supportRFC5988": "true"
+											}
+										},
+										"sink": {
+											"type": "AzureSqlSink",
+											"writeBehavior": "insert",
+											"sqlWriterUseTableLock": false,
+											"disableMetricsCollection": false
+										},
+										"enableStaging": false,
+										"translator": {
+											"type": "TabularTranslator",
+											"mappings": [
+												{
+													"source": {
+														"path": "[['opportunity_ref_id']"
+													},
+													"sink": {
+														"name": "ref_id",
+														"type": "Int32"
+													}
+												},
+												{
+													"source": {
+														"path": "[['opportunity_date_time']"
+													},
+													"sink": {
+														"name": "opportunity_date",
+														"type": "DateTime"
+													}
+												},
+												{
+													"source": {
+														"path": "[['opportunity_title']"
+													},
+													"sink": {
+														"name": "opportunity_title",
+														"type": "String"
+													}
+												},
+												{
+													"source": {
+														"path": "[['current_stage']"
+													},
+													"sink": {
+														"name": "current_stage",
+														"type": "String"
+													}
+												},
+												{
+													"source": {
+														"path": "[['marketing_source']"
+													},
+													"sink": {
+														"name": "marketing_source",
+														"type": "String"
+													}
+												},
+												{
+													"source": {
+														"path": "[['lead_name']"
+													},
+													"sink": {
+														"name": "lead_name",
+														"type": "String"
+													}
+												},
+												{
+													"source": {
+														"path": "[['lead_contact_number']"
+													},
+													"sink": {
+														"name": "lead_contact_number",
+														"type": "String"
+													}
+												},
+												{
+													"source": {
+														"path": "[['lead_email_title']"
+													},
+													"sink": {
+														"name": "lead_email",
+														"type": "String"
+													}
+												},
+												{
+													"source": {
+														"path": "[['lead_owner']"
+													},
+													"sink": {
+														"name": "lead_owner",
+														"type": "String"
+													}
+												},
+												{
+													"source": {
+														"path": "[['opportunity_status']"
+													},
+													"sink": {
+														"name": "opportunity_status",
+														"type": "String"
+													}
+												},
+												{
+													"source": {
+														"path": "[['opportunity_status_remark']"
+													},
+													"sink": {
+														"name": "opportunity_status_remark",
+														"type": "String"
+													}
+												},
+												{
+													"source": {
+														"path": "[['lost_reason']"
+													},
+													"sink": {
+														"name": "lost_reason",
+														"type": "String"
+													}
+												},
+												{
+													"source": {
+														"path": "[['utm_source']"
+													},
+													"sink": {
+														"name": "utm_source",
+														"type": "String"
+													}
+												},
+												{
+													"source": {
+														"path": "[['utm_medium']"
+													},
+													"sink": {
+														"name": "utm_medium",
+														"type": "String"
+													}
+												},
+												{
+													"source": {
+														"path": "[['utm_term']"
+													},
+													"sink": {
+														"name": "utm_term",
+														"type": "String"
+													}
+												},
+												{
+													"source": {
+														"path": "[['utm_campaign']"
+													},
+													"sink": {
+														"name": "utm_campaign",
+														"type": "String"
+													}
+												},
+												{
+													"source": {
+														"path": "[['utm_content']"
+													},
+													"sink": {
+														"name": "utm_content",
+														"type": "String"
+													}
+												},
+												{
+													"source": {
+														"path": "[['deal_status_last_updated']"
+													},
+													"sink": {
+														"name": "deal_status_last_updated",
+														"type": "String"
+													}
+												}
+											],
+											"collectionReference": "$['record']",
+											"mapComplexValuesToString": false
+										}
+									},
+									"inputs": [
+										{
+											"referenceName": "API_CRM_GetDealData",
+											"type": "DatasetReference",
+											"parameters": {
+												"ds": {
+													"value": "@concat('&ds=', variables('LoadDate1'))",
+													"type": "Expression"
+												},
+												"de": {
+													"value": "@concat('&de=', variables('LoadDate1'))",
+													"type": "Expression"
+												},
+												"api_token": "&api_token=3ca45389e66a542b34ffe6a29ad9aa06",
+												"secret_key": "&secret_key=3485957268f41b66a676f11857469bcb"
+											}
+										}
+									],
+									"outputs": [
+										{
+											"referenceName": "Stg_CRM_getDealData",
+											"type": "DatasetReference",
+											"parameters": {}
+										}
+									]
+								},
+								{
+									"name": "Increment Date2",
+									"type": "SetVariable",
+									"dependsOn": [
+										{
+											"activity": "GetDealData",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
+									"policy": {
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"variableName": "LoadDate2",
+										"value": {
+											"value": "@formatDateTime(adddays(variables('LoadDate1'),1),'yyyy-MM-dd')",
+											"type": "Expression"
+										}
+									}
+								},
+								{
+									"name": "Set Date1 to Date2",
+									"type": "SetVariable",
+									"dependsOn": [
+										{
+											"activity": "Increment Date2",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
+									"policy": {
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"variableName": "LoadDate1",
+										"value": {
+											"value": "@variables('LoadDate2')",
+											"type": "Expression"
+										}
+									}
+								}
+							],
+							"timeout": "0.12:00:00"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"parameters": {
+					"StartDate": {
+						"type": "string",
+						"defaultValue": "2024-06-01"
+					},
+					"EndDate": {
+						"type": "string",
+						"defaultValue": "2024-07-01"
+					}
+				},
+				"variables": {
+					"LoadDate1": {
+						"type": "String"
+					},
+					"LoadDate2": {
+						"type": "String"
+					}
+				},
+				"folder": {
+					"name": "NexCRM"
+				},
+				"annotations": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/GetDealData_LastUpdated')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "GetDealData LastUpdated",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "RestSource",
+								"httpRequestTimeout": "00:01:40",
+								"requestInterval": "00.00:00:00.010",
+								"requestMethod": "GET",
+								"paginationRules": {
+									"supportRFC5988": "true"
+								}
+							},
+							"sink": {
+								"type": "AzureSqlSink",
+								"preCopyScript": "DELETE [Stg_CRM_getDealData]",
+								"writeBehavior": "insert",
+								"sqlWriterUseTableLock": false,
+								"disableMetricsCollection": false
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"path": "[['opportunity_ref_id']"
+										},
+										"sink": {
+											"name": "ref_id",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"path": "[['opportunity_date_time']"
+										},
+										"sink": {
+											"name": "opportunity_date",
+											"type": "DateTime"
+										}
+									},
+									{
+										"source": {
+											"path": "[['opportunity_title']"
+										},
+										"sink": {
+											"name": "opportunity_title",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "[['current_stage']"
+										},
+										"sink": {
+											"name": "current_stage",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "[['marketing_source']"
+										},
+										"sink": {
+											"name": "marketing_source",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "[['lead_name']"
+										},
+										"sink": {
+											"name": "lead_name",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "[['lead_contact_number']"
+										},
+										"sink": {
+											"name": "lead_contact_number",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "[['lead_email_title']"
+										},
+										"sink": {
+											"name": "lead_email",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "[['lead_owner']"
+										},
+										"sink": {
+											"name": "lead_owner",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "[['opportunity_status']"
+										},
+										"sink": {
+											"name": "opportunity_status",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "[['opportunity_status_remark']"
+										},
+										"sink": {
+											"name": "opportunity_status_remark",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "[['lost_reason']"
+										},
+										"sink": {
+											"name": "lost_reason",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "[['utm_source']"
+										},
+										"sink": {
+											"name": "utm_source",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "[['utm_medium']"
+										},
+										"sink": {
+											"name": "utm_medium",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "[['utm_term']"
+										},
+										"sink": {
+											"name": "utm_term",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "[['utm_campaign']"
+										},
+										"sink": {
+											"name": "utm_campaign",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "[['utm_content']"
+										},
+										"sink": {
+											"name": "utm_content",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "[['deal_status_last_updated']"
+										},
+										"sink": {
+											"name": "deal_status_last_updated",
+											"type": "String"
+										}
+									}
+								],
+								"collectionReference": "$['record']",
+								"mapComplexValuesToString": false
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "API_CRM_GetDealData_LastUpdated",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "Stg_CRM_getDealData",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					},
+					{
+						"name": "Exec Insert_CRM_GetDealData",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [
+							{
+								"activity": "GetDealData LastUpdated",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[dbo].[Insert_CRM_GetDealData]"
+						},
+						"linkedServiceName": {
+							"referenceName": "SunsuriaDM",
+							"type": "LinkedServiceReference"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"folder": {
+					"name": "NexCRM"
+				},
+				"annotations": []
 			},
 			"dependsOn": []
 		},
@@ -1104,7 +1917,9 @@
 				"annotations": []
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/Stg_Units')]"
+				"[concat(variables('factoryId'), '/datasets/Stg_Projects')]",
+				"[concat(variables('factoryId'), '/datasets/Stg_Units')]",
+				"[concat(variables('factoryId'), '/datasets/Stg_Forms')]"
 			]
 		},
 		{
@@ -1772,7 +2587,9 @@
 				},
 				"annotations": []
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/Stg_RFWI_Phases')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/LoadRFWI_Projects')]",
@@ -1910,7 +2727,7 @@
 									],
 									"outputs": [
 										{
-											"referenceName": "Stg_RFWI_Companies",
+											"referenceName": "Stg_RFWI_Projects",
 											"type": "DatasetReference",
 											"parameters": {}
 										}
@@ -1965,7 +2782,9 @@
 				},
 				"annotations": []
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/Stg_RFWI_Projects')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/LoadVP')]",

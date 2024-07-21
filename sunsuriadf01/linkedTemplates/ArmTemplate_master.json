@@ -19,6 +19,10 @@
 			"type": "string",
 			"defaultValue": "https://engine.pegasuswork.com/powerbi_api"
 		},
+		"REST_NexCRM_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://www.nexcrmapis.com/cloud/toolbox"
+		},
 		"REST_RFWI_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://sunsuria.pegasuswork.com/api/powerbi/rfwi"
@@ -62,6 +66,9 @@
 					},
 					"REST_Defects_properties_typeProperties_url": {
 						"value": "[parameters('REST_Defects_properties_typeProperties_url')]"
+					},
+					"REST_NexCRM_properties_typeProperties_url": {
+						"value": "[parameters('REST_NexCRM_properties_typeProperties_url')]"
 					},
 					"REST_RFWI_properties_typeProperties_url": {
 						"value": "[parameters('REST_RFWI_properties_typeProperties_url')]"

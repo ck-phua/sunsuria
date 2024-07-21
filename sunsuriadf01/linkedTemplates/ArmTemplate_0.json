@@ -19,6 +19,10 @@
 			"type": "string",
 			"defaultValue": "https://engine.pegasuswork.com/powerbi_api"
 		},
+		"REST_NexCRM_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://www.nexcrmapis.com/cloud/toolbox"
+		},
 		"REST_RFWI_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://sunsuria.pegasuswork.com/api/powerbi/rfwi"
@@ -56,6 +60,21 @@
 				"type": "RestService",
 				"typeProperties": {
 					"url": "[parameters('REST_Defects_properties_typeProperties_url')]",
+					"enableServerCertificateValidation": true,
+					"authenticationType": "Anonymous"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/REST_NexCRM')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "RestService",
+				"typeProperties": {
+					"url": "[parameters('REST_NexCRM_properties_typeProperties_url')]",
 					"enableServerCertificateValidation": true,
 					"authenticationType": "Anonymous"
 				}
@@ -104,6 +123,67 @@
 				}
 			},
 			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/API_CRM_GetDealData')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "REST_NexCRM",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"ds": {
+						"type": "string",
+						"defaultValue": "&ds=2024-01-01"
+					},
+					"de": {
+						"type": "string",
+						"defaultValue": "&de=2024-01-01"
+					},
+					"api_token": {
+						"type": "string",
+						"defaultValue": "&api_token=3ca45389e66a542b34ffe6a29ad9aa06"
+					},
+					"secret_key": {
+						"type": "string",
+						"defaultValue": "&secret_key=3485957268f41b66a676f11857469bcb"
+					}
+				},
+				"annotations": [],
+				"type": "RestResource",
+				"typeProperties": {
+					"relativeUrl": {
+						"value": "@concat('api_retrieve_deal_data?task=getDealData',\ndataset().api_token,\ndataset().secret_key,\ndataset().ds, \ndataset().de)",
+						"type": "Expression"
+					}
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/REST_NexCRM')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/API_CRM_GetDealData_LastUpdated')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "REST_NexCRM",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "RestResource",
+				"typeProperties": {
+					"relativeUrl": "api_retrieve_deal_data?task=getDealData_Last_Updated&api_token=3ca45389e66a542b34ffe6a29ad9aa06&secret_key=3485957268f41b66a676f11857469bcb&ds=2024-05-01&de=2024-05-05"
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/REST_NexCRM')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/API_Defects_Deleted_Defects')]",
@@ -223,7 +303,7 @@
 				"annotations": [],
 				"type": "RestResource",
 				"typeProperties": {
-					"relativeUrl": "projects_list?auth_token=ajDAiGUgqYjz5HwHVYD61ccm"
+					"relativeUrl": "projects_list?no_pagination=true&auth_token=ajDAiGUgqYjz5HwHVYD61ccm"
 				},
 				"schema": []
 			},
@@ -393,6 +473,102 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/Stg_CRM_getDealData')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "SunsuriaDM",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "ref_id",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "opportunity_date",
+						"type": "datetime2",
+						"scale": 7
+					},
+					{
+						"name": "opportunity_title",
+						"type": "nvarchar"
+					},
+					{
+						"name": "current_stage",
+						"type": "nvarchar"
+					},
+					{
+						"name": "marketing_source",
+						"type": "nvarchar"
+					},
+					{
+						"name": "lead_name",
+						"type": "nvarchar"
+					},
+					{
+						"name": "lead_contact_number",
+						"type": "nvarchar"
+					},
+					{
+						"name": "lead_email",
+						"type": "nvarchar"
+					},
+					{
+						"name": "lead_owner",
+						"type": "nvarchar"
+					},
+					{
+						"name": "opportunity_status",
+						"type": "nvarchar"
+					},
+					{
+						"name": "opportunity_status_remark",
+						"type": "nvarchar"
+					},
+					{
+						"name": "lost_reason",
+						"type": "nvarchar"
+					},
+					{
+						"name": "utm_source",
+						"type": "nvarchar"
+					},
+					{
+						"name": "utm_medium",
+						"type": "nvarchar"
+					},
+					{
+						"name": "utm_term",
+						"type": "nvarchar"
+					},
+					{
+						"name": "utm_campaign",
+						"type": "nvarchar"
+					},
+					{
+						"name": "utm_content",
+						"type": "nvarchar"
+					},
+					{
+						"name": "deal_status_last_updated",
+						"type": "nvarchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "Stg_CRM_getDealData"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/SunsuriaDM')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/Stg_Defects')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -469,194 +645,6 @@
 				"typeProperties": {
 					"schema": "dbo",
 					"table": "Stg_MyTaman_Defects"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/SunsuriaDM')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/Stg_Forms')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "SunsuriaDM",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "AzureSqlTable",
-				"schema": [
-					{
-						"name": "id",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "unit_owner_id",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "status",
-						"type": "nvarchar"
-					},
-					{
-						"name": "sign_off_date",
-						"type": "nvarchar"
-					},
-					{
-						"name": "complete_date",
-						"type": "nvarchar"
-					},
-					{
-						"name": "closed_date",
-						"type": "nvarchar"
-					},
-					{
-						"name": "stage",
-						"type": "nvarchar"
-					},
-					{
-						"name": "project_id",
-						"type": "nvarchar"
-					},
-					{
-						"name": "created_at",
-						"type": "nvarchar"
-					},
-					{
-						"name": "updated_at",
-						"type": "nvarchar"
-					}
-				],
-				"typeProperties": {
-					"schema": "dbo",
-					"table": "Stg_MyTaman_Forms"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/SunsuriaDM')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/Stg_Projects')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "SunsuriaDM",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "AzureSqlTable",
-				"schema": [
-					{
-						"name": "id",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "name",
-						"type": "nvarchar"
-					},
-					{
-						"name": "address",
-						"type": "nvarchar"
-					},
-					{
-						"name": "stage",
-						"type": "nvarchar"
-					}
-				],
-				"typeProperties": {
-					"schema": "dbo",
-					"table": "Stg_MyTaman_Projects"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/SunsuriaDM')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/Stg_RFWI_Companies')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "SunsuriaDM",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "AzureSqlTable",
-				"schema": [
-					{
-						"name": "id",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "company_id",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "project_code",
-						"type": "nvarchar"
-					},
-					{
-						"name": "project_name",
-						"type": "nvarchar"
-					}
-				],
-				"typeProperties": {
-					"schema": "dbo",
-					"table": "Stg_MyTaman_RFWI_Projects"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/SunsuriaDM')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/Stg_RFWI_Phases')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "SunsuriaDM",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "AzureSqlTable",
-				"schema": [
-					{
-						"name": "id",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "company_id",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "project_id",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "phase_code",
-						"type": "nvarchar"
-					},
-					{
-						"name": "phase_name",
-						"type": "nvarchar"
-					}
-				],
-				"typeProperties": {
-					"schema": "dbo",
-					"table": "Stg_MyTaman_RFWI_Phases"
 				}
 			},
 			"dependsOn": [
