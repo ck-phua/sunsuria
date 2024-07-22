@@ -9,7 +9,7 @@
 					{
 						"activity": "Until1",
 						"dependencyConditions": [
-							"Skipped"
+							"Succeeded"
 						]
 					}
 				],
