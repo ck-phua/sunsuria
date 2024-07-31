@@ -49,7 +49,7 @@
 							{
 								"activity": "Until1",
 								"dependencyConditions": [
-									"Skipped"
+									"Succeeded"
 								]
 							}
 						],
@@ -91,7 +91,7 @@
 						"type": "Until",
 						"dependsOn": [
 							{
-								"activity": "Set Load Date",
+								"activity": "DELETE Stg",
 								"dependencyConditions": [
 									"Succeeded"
 								]
@@ -380,6 +380,39 @@
 							],
 							"timeout": "0.12:00:00"
 						}
+					},
+					{
+						"name": "DELETE Stg",
+						"type": "Script",
+						"dependsOn": [
+							{
+								"activity": "Set Load Date",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"linkedServiceName": {
+							"referenceName": "SunsuriaDM",
+							"type": "LinkedServiceReference"
+						},
+						"typeProperties": {
+							"scripts": [
+								{
+									"type": "NonQuery",
+									"text": "DELETE [Stg_CRM_getDealData]"
+								}
+							],
+							"scriptBlockExecutionTimeout": "02:00:00"
+						}
 					}
 				],
 				"policy": {
@@ -388,11 +421,11 @@
 				"parameters": {
 					"StartDate": {
 						"type": "string",
-						"defaultValue": "2024-06-01"
+						"defaultValue": "2024-07-01"
 					},
 					"EndDate": {
 						"type": "string",
-						"defaultValue": "2024-07-01"
+						"defaultValue": "2024-08-01"
 					}
 				},
 				"variables": {
