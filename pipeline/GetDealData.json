@@ -377,11 +377,11 @@
 		"parameters": {
 			"StartDate": {
 				"type": "string",
-				"defaultValue": "2024-07-01"
+				"defaultValue": "2024-08-01"
 			},
 			"EndDate": {
 				"type": "string",
-				"defaultValue": "2024-08-01"
+				"defaultValue": "2024-09-01"
 			}
 		},
 		"variables": {
