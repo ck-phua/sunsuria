@@ -74,7 +74,7 @@
 										}
 									],
 									"httpRequestTimeout": "00:03:30",
-									"requestInterval": "00.00:00:00.080",
+									"requestInterval": "00.00:00:00.020",
 									"requestMethod": "POST",
 									"paginationRules": {
 										"supportRFC5988": "true"
