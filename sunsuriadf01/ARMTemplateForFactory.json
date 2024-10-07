@@ -421,11 +421,11 @@
 				"parameters": {
 					"StartDate": {
 						"type": "string",
-						"defaultValue": "2024-07-01"
+						"defaultValue": "2024-08-01"
 					},
 					"EndDate": {
 						"type": "string",
-						"defaultValue": "2024-08-01"
+						"defaultValue": "2024-09-01"
 					}
 				},
 				"variables": {
@@ -1887,7 +1887,7 @@
 												}
 											],
 											"httpRequestTimeout": "00:03:30",
-											"requestInterval": "00.00:00:00.080",
+											"requestInterval": "00.00:00:00.020",
 											"requestMethod": "POST",
 											"paginationRules": {
 												"supportRFC5988": "true"
