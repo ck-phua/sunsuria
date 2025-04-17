@@ -867,11 +867,11 @@
 				"parameters": {
 					"StartDate": {
 						"type": "string",
-						"defaultValue": "2024-08-01"
+						"defaultValue": "2024-09-01"
 					},
 					"EndDate": {
 						"type": "string",
-						"defaultValue": "2024-09-01"
+						"defaultValue": "2024-10-01"
 					}
 				},
 				"variables": {
@@ -2204,6 +2204,7 @@
 								"value": "@activity('GetPhaseList').output.resultSets[0].Rows",
 								"type": "Expression"
 							},
+							"isSequential": true,
 							"activities": [
 								{
 									"name": "Copy RFWI_List",
