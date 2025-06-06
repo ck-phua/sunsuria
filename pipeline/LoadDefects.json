@@ -597,7 +597,7 @@
 								}
 							],
 							"type": "Query",
-							"text": "SELECT MAX(updated_at) + '.' AS LastUpdatedDate FROM MyTaman_Forms\n"
+							"text": "SELECT MAX(updated_at) AS LastUpdatedDate FROM MyTaman_Forms\n"
 						}
 					]
 				}
