@@ -123,8 +123,6 @@
 			{
 				"name": "GetLastUpdatedDate",
 				"type": "Script",
-				"state": "Inactive",
-				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [],
 				"policy": {
 					"timeout": "0.12:00:00",
@@ -159,8 +157,6 @@
 			{
 				"name": "Load Defect_List",
 				"type": "Copy",
-				"state": "Inactive",
-				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [
 					{
 						"activity": "GetLastUpdatedDate",
@@ -343,7 +339,7 @@
 						"type": "DatasetReference",
 						"parameters": {
 							"last_updated": {
-								"value": "@activity('GetLastUpdatedDate').output",
+								"value": "@activity('GetLastUpdatedDate').output.resultSets[0].rows[0]['LastUpdatedDate']",
 								"type": "Expression"
 							},
 							"auth_nopage": "auth_token=ajDAiGUgqYjz5HwHVYD61ccm&no_pagination=true"
@@ -360,8 +356,6 @@
 			{
 				"name": "Exec Insert Defects",
 				"type": "SqlServerStoredProcedure",
-				"state": "Inactive",
-				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [
 					{
 						"activity": "Load Defect_List",
@@ -751,7 +745,7 @@
 						"type": "DatasetReference",
 						"parameters": {
 							"last_updated": {
-								"value": "@activity('GetLastUpdatedDate_Forms').output",
+								"value": "@activity('GetLastUpdatedDate_Forms').output.resultSets[0].rows[0]['LastUpdatedDate']",
 								"type": "Expression"
 							},
 							"auth_nopage": "auth_token=ajDAiGUgqYjz5HwHVYD61ccm&no_pagination=true"
