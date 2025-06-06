@@ -6,7 +6,7 @@
 			"type": "LinkedServiceReference"
 		},
 		"parameters": {
-			"q[updated_at_gteq]": {
+			"last_updated": {
 				"type": "string",
 				"defaultValue": "2022-09-01"
 			},
