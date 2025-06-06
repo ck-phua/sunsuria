@@ -123,6 +123,8 @@
 			{
 				"name": "GetLastUpdatedDate",
 				"type": "Script",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [],
 				"policy": {
 					"timeout": "0.12:00:00",
@@ -157,6 +159,8 @@
 			{
 				"name": "Load Defect_List",
 				"type": "Copy",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [
 					{
 						"activity": "GetLastUpdatedDate",
@@ -356,6 +360,8 @@
 			{
 				"name": "Exec Insert Defects",
 				"type": "SqlServerStoredProcedure",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [
 					{
 						"activity": "Load Defect_List",
@@ -597,7 +603,7 @@
 								}
 							],
 							"type": "Query",
-							"text": "SELECT MAX(updated_at) AS LastUpdatedDate FROM MyTaman_Forms\n"
+							"text": "SELECT MAX(updated_at) + '.' AS LastUpdatedDate FROM MyTaman_Forms\n"
 						}
 					],
 					"logSettings": {
