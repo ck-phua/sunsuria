@@ -1141,7 +1141,7 @@
 								"type": "DatasetReference",
 								"parameters": {
 									"last_updated": {
-										"value": "@activity('GetLastUpdatedDate').output",
+										"value": "@activity('GetLastUpdatedDate').output.resultSets[0].rows[0]['LastUpdatedDate']",
 										"type": "Expression"
 									},
 									"auth_nopage": "auth_token=ajDAiGUgqYjz5HwHVYD61ccm&no_pagination=true"
@@ -1403,7 +1403,10 @@
 									"type": "Query",
 									"text": "SELECT MAX(updated_at) + '.' AS LastUpdatedDate FROM MyTaman_Forms\n"
 								}
-							]
+							],
+							"logSettings": {
+								"logDestination": "ActivityOutput"
+							}
 						}
 					},
 					{
@@ -1546,7 +1549,7 @@
 								"type": "DatasetReference",
 								"parameters": {
 									"last_updated": {
-										"value": "@activity('GetLastUpdatedDate_Forms').output",
+										"value": "@activity('GetLastUpdatedDate_Forms').output.resultSets[0].rows[0]['LastUpdatedDate']",
 										"type": "Expression"
 									},
 									"auth_nopage": "auth_token=ajDAiGUgqYjz5HwHVYD61ccm&no_pagination=true"
